@@ -3,7 +3,7 @@
 [![Build Status](https://travis-ci.org/todvora/gitbook-plugin-image-captions.svg?branch=master)](https://travis-ci.org/todvora/gitbook-plugin-image-captions)
 [![Dependencies Status](https://david-dm.org/todvora/gitbook-plugin-image-captions.svg)](https://www.npmjs.com/package/gitbook-plugin-image-captions)
 
-Add nice generated captions to your book. This plugin converts ```alt``` or ```title``` of your images to captions.
+Add nice generated captions to your book images. This plugin converts ```alt``` or ```title``` of your images to captions.
 Works both in GitBook website and generated book (pdf, mobi).
  
 ![rendered page](https://raw.github.com/todvora/gitbook-plugin-image-captions/master/preview.jpg)
@@ -23,7 +23,7 @@ If you're building your book locally, download an prepare plugins simply by runn
 ## Configuration
 The plugin provides reasonable defaults and you don't need to config anything. 
 
-If you want to configure the caption style, you can provide your own text template in form:
+If you want to configure the caption text, you can provide your own template in the form:
 ```
 {
     "plugins": [
@@ -36,10 +36,11 @@ If you want to configure the caption style, you can provide your own text templa
     }
 }
 ```
-The keyword ```_CAPTION_``` will be automatically replaced by title or alt of your image. 
+The keyword ```_CAPTION_``` will be automatically replaced by title or alt of your image 
+(the plugin uses first ```title```, if not found, then ```alt```). 
 
 ## CSS Styles
-The plugin generates simple ```figure``` around your images:
+This plugin generates simple ```figure``` around your images:
 ```
 <figure>
     <img src="../images/phetchaburi.jpg" alt="Phra Nakhon Khiri, Phetchaburi">
