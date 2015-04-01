@@ -2,7 +2,7 @@
 Add nice generated captions to your book. This plugin converts ```alt``` or ```title``` of your images to captions.
 Works both in GitBook website and generated book (pdf, mobi).
  
-![rendered page](https://raw.github.com/GitbookIO/editor/master/preview.jpg)
+![rendered page](https://raw.github.com/todvora/gitbook-plugin-image-captions/master/preview.jpg)
 
 ## Instalation
 In your book.json add plugin like this:
@@ -12,7 +12,7 @@ In your book.json add plugin like this:
         "image-captions"
     ]
 }
-
+```
 
 If you're building your book locally, download an prepare plugins simply by running: ```gitbook install```. 
 
