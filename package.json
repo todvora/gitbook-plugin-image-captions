@@ -3,6 +3,7 @@
     "description": "Image captions plugin for GitBook",
     "main": "index.js",
     "version": "0.0.1",
+    "author": "Tomas Dvorak <todvora@gmail.com>",
     "engines": {
         "gitbook": "*"
     },
