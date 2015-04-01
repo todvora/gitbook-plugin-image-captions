@@ -1,18 +1,28 @@
 {
-    "name": "gitbook-plugin",
-    "description": "Sample plugin for GitBook",
+    "name": "gitbook-plugin-image-captions",
+    "description": "Image captions plugin for GitBook",
     "main": "index.js",
-    "version": "0.0.2",
+    "version": "0.0.1",
     "engines": {
-        "gitbook": "*"
+        "gitbook": ">=2.0.0"
     },
-    "homepage": "https://github.com/GitbookIO/plugin",
+    "homepage": "https://github.com/todvora/gitbook-plugin-image-captions",
     "repository": {
         "type": "git",
-        "url": "https://github.com/GitbookIO/plugin.git"
+        "url": "https://github.com/todvora/gitbook-plugin-image-captions.git"
     },
     "license": "Apache 2",
     "bugs": {
-        "url": "https://github.com/GitbookIO/plugin/issues"
+        "url": "https://github.com/todvora/gitbook-plugin-image-captions/issues"
+    },
+    "dependencies": {
+        "cheerio": "0.19.0",
+        "underscore": "1.8.2"
+    },
+    "devDependencies": {
+        "jasmine-node": "1.14.5"
+    },
+    "scripts": {
+        "test": "jasmine-node spec --verbose --captureExceptions"
     }
 }

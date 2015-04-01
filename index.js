@@ -1,84 +1,48 @@
+var cheerio = require('cheerio');
+var _ = require('underscore');
+
+var insertCaptions = function(section) {
+  var options = this.options.pluginsConfig["image-captions"] || {};
+  var $ = cheerio.load(section.content);
+  $('img').each(function(i, elem) {
+    var img = $(elem);
+    var wrapImage = function(caption) {
+      var template = options.caption || "Figure: _CAPTION_";
+      console.log("using template of: " + template);
+      var result = template.replace("_CAPTION_", caption);
+      $(elem).replaceWith("<figure>" + $.html($(elem)) + "<figcaption>"+result+"</figcaption></figure>");
+    }
+    var title = img.attr("title");
+    var alt = img.attr("alt");
+    if (title) {
+      wrapImage(title);
+    } else if (alt) {
+      wrapImage(alt);
+    }
+  });
+  section.content = $.html();
+}
+
 module.exports = {
-    // Extend website resources and html
     website: {
-        assets: "./book",
-        js: [
-            "test.js"
-        ],
+        assets: "./assets",
         css: [
-            "test.css"
+            "image-captions.css"
         ],
-        html: {
-            "html:start": function() {
-                return "<!-- Start book "+this.options.title+" -->"
-            },
-            "html:end": function() {
-                return "<!-- End of book "+this.options.title+" -->"
-            },
-
-            "head:start": "<!-- head:start -->",
-            "head:end": "<!-- head:end -->",
-
-            "body:start": "<!-- body:start -->",
-            "body:end": "<!-- body:end -->"
-        }
     },
-
-    // Extend ebook resources and html
-    website: {
-        assets: "./book",
-        js: [
-            "test.js"
-        ],
-        css: [
-            "test.css"
-        ],
-        html: {
-            "html:start": function() {
-                return "<!-- Start book "+this.options.title+" -->"
-            },
-            "html:end": function() {
-                return "<!-- End of book "+this.options.title+" -->"
-            },
-
-            "head:start": "<!-- head:start -->",
-            "head:end": "<!-- head:end -->",
-
-            "body:start": "<!-- body:start -->",
-            "body:end": "<!-- body:end -->"
-        }
+    ebook: {
+      assets: "./assets",
+      css: [
+         "image-captions.css"
+      ]
     },
-
-    // Extend templating blocks
-    blocks: {
-        // Author will be able to write "{% myTag %}World{% endMyTag %}"
-        myTag: {
-            process: function(blk) {
-                return "Hello "+blk.body;
-            }
-        }
-    },
-
-    // Extend templating filters
-    filters: {
-        // Author will be able to write "{{ 'test'|myFilter }}"
-        myFilter: function(s) {
-            return "Hello "+s;
-        }
-    },
-
-    // Hook process during build
     hooks: {
-        // For all the hooks, this represent the current generator
-
-        // This is called before the book is generated
-        "init": function() {
-            console.log("init!");
-        },
-
-        // This is called after the book generation
-        "finish": function() {
-            console.log("finish!");
-        }
+      "page": function(page) {
+        var sections = _.select(page.sections, function(section) {
+          return section.type == 'normal';
+        });
+         _.forEach(sections, insertCaptions, this);
+        return page;
+      }
     }
 };
