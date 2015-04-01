@@ -4,7 +4,7 @@
     "main": "index.js",
     "version": "0.0.1",
     "engines": {
-        "gitbook": ">=2.0.0"
+        "gitbook": "*"
     },
     "homepage": "https://github.com/todvora/gitbook-plugin-image-captions",
     "repository": {

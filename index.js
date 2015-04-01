@@ -24,6 +24,12 @@ var insertCaptions = function(section) {
 }
 
 module.exports = {
+    book: {
+        assets: "./assets",
+        css: [
+            "image-captions.css"
+        ]
+    },
     website: {
         assets: "./assets",
         css: [
