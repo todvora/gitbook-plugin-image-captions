@@ -1,7 +1,9 @@
 # GitBook Image Captions Plugin
 
 [![Build Status](https://travis-ci.org/todvora/gitbook-plugin-image-captions.svg?branch=master)](https://travis-ci.org/todvora/gitbook-plugin-image-captions)
-[![Dependencies Status](https://david-dm.org/todvora/gitbook-plugin-image-captions.svg)](https://www.npmjs.com/package/gitbook-plugin-image-captions)
+[![Coverage Status](https://coveralls.io/repos/todvora/gitbook-plugin-image-captions/badge.svg)](https://coveralls.io/r/todvora/gitbook-plugin-image-captions)
+[![Dependencies Status](https://david-dm.org/todvora/gitbook-plugin-image-captions/status.svg)](https://david-dm.org/todvora/gitbook-plugin-image-captions/)
+[![DevDependencies Status](https://david-dm.org/todvora/gitbook-plugin-image-captions/dev-status.svg)](https://david-dm.org/todvora/gitbook-plugin-image-captions/#info=devDependencies)
 
 Add nice generated captions to your book images. This plugin converts ```alt``` or ```title``` of your images to captions.
 Works both in GitBook website and generated book (pdf, mobi).
@@ -67,3 +69,28 @@ figcaption {
 How to attach your own styles can you read on [help.gitbook.com](http://help.gitbook.com/format/configuration.html). 
 Then simply add your style definitions for ```figure``` and ```figcaption```. Note: different styles can be attached for
 web and books, so you can style the captions differently for every medium.
+
+## Under the hood
+
+Are you interested, how the plugin works? Do you want to fork it and start hacking on your own plugin?
+
+### How is it done
+This plugin attaches itself to the "page" event of GitBook generate task. It receives rendered HTML page of the chapter.
+Then the plugin goes through the code of page, searching for images. If there is any image detected, containing also 
+```alt``` or ```title``` atribute, the plugin replaces image occurences with the ```figure``` tag, including original 
+image and additional ```figcaption``` tag with the text read from image attributes.
+
+### Tests
+Important part of this plugin is the test suite. You can run the test with command:
+```
+npm test
+```
+
+The test suite includes [JSHint](https://www.npmjs.com/package/jshint) validation of the plugin and test suite itself. Then the [Jasmine](https://www.npmjs.com/package/jasmine-node) tests are executed, 
+validating expected plugin bahavior. To be sure, that all of the code is covered, [Istanbul](https://github.com/gotwarlost/istanbul) generates coverage reports
+and sends them to [Coveralls.io](https://coveralls.io/r/todvora/gitbook-plugin-image-captions) service. 
+ 
+The tests are executed with every pushed commit on the [Travis-CI server](https://travis-ci.org/todvora/gitbook-plugin-image-captions).
+
+### Based on
+This plugin is based on example plugin from [GitbookIO/plugin](https://github.com/GitbookIO/plugin). 

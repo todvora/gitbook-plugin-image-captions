@@ -4,8 +4,9 @@
     "main": "index.js",
     "version": "0.0.2",
     "author": "Tomas Dvorak <todvora@gmail.com>",
+    "keywords": ["gitbook", "gitbook-plugin", "image", "caption"],
     "engines": {
-        "gitbook": "*"
+        "gitbook": ">1.x.x"
     },
     "homepage": "https://github.com/todvora/gitbook-plugin-image-captions",
     "repository": {
@@ -17,13 +18,19 @@
         "url": "https://github.com/todvora/gitbook-plugin-image-captions/issues"
     },
     "dependencies": {
-        "cheerio": "0.19.0",
-        "underscore": "1.8.2"
+        "cheerio": "~0.19.0",
+        "underscore": "~1.8.2"
     },
     "devDependencies": {
-        "jasmine-node": "1.14.5"
+        "jasmine-node": ">=1.14.5",
+        "istanbul": ">=0.3.13",
+        "jshint": ">=2.6.3",
+        "coveralls": ">=2.11.2"
     },
     "scripts": {
-        "test": "jasmine-node spec --verbose --captureExceptions"
+        "lint": "jshint index.js spec/**.js",
+        "pretest": "npm run lint",
+        "test": "istanbul cover jasmine-node -- spec --verbose --captureExceptions",
+        "coverage": "cat ./coverage/lcov.info | coveralls"
     }
 }
