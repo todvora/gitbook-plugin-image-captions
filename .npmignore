@@ -1,0 +1,11 @@
+# List of files / directories, that will not be part of the npm distribution.
+# Here should be named everything that isn't needed when running the module.
+
+# preview image of plugin from the README.md
+preview.jpg
+
+# travis-ci config
+.travis.yml
+
+# tests sources folder
+spec
