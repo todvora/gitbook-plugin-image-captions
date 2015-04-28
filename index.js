@@ -2,7 +2,6 @@
 "use strict";
 
 var cheerio = require('cheerio');
-var _ = require('underscore');
 
 var insertCaptions = function(section) {
   var options = this.options.pluginsConfig['image-captions'] || {};
@@ -12,7 +11,7 @@ var insertCaptions = function(section) {
     var wrapImage = function(caption) {
       var template = options.caption || 'Figure: _CAPTION_';
       var result = template.replace('_CAPTION_', caption);
-      $(elem).replaceWith('<figure>' + $.html(img) + '<figcaption>'+result+'</figcaption></figure>');
+      img.replaceWith('<figure>' + $.html(img) + '<figcaption>'+result+'</figcaption></figure>');
     };
     var title = img.attr('title');
     var alt = img.attr('alt');
@@ -46,10 +45,10 @@ module.exports = {
     },
     hooks: {
       'page': function(page) {  // after page has been converted to html
-        var sections = _.select(page.sections, function(section) {
+        page.sections.filter(function(section) {
           return section.type == 'normal';
-        });
-         _.forEach(sections, insertCaptions, this);
+        })
+        .forEach(insertCaptions, this);
         return page;
       }
     }

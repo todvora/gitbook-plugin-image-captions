@@ -38,8 +38,8 @@ If you want to configure the caption text, you can provide your own template in 
     }
 }
 ```
-The keyword ```_CAPTION_``` will be automatically replaced by title or alt of your image 
-(the plugin uses first ```title```, if not found, then ```alt```). 
+The keyword ```_CAPTION_``` will be automatically replaced by the title or alt of your image 
+(the plugin uses first ```title```, if not found, then ```alt``` attribute). 
 
 ## CSS Styles
 This plugin generates simple ```figure``` around your images:
@@ -71,12 +71,8 @@ Then simply add your style definitions for ```figure``` and ```figcaption```. No
 web and books, so you can style the captions differently for every medium.
 
 ## Under the hood
-
-Are you interested, how the plugin works? Do you want to fork it and start hacking on your own plugin?
-
-### How is it done
 This plugin attaches itself to the "page" event of GitBook generate task. It receives rendered HTML page of the chapter.
-Then the plugin goes through the code of page, searching for images. If there is any image detected, containing also 
+Then the plugin goes through the HTML code of the page, searching for images. If there is any image detected, containing also 
 ```alt``` or ```title``` atribute, the plugin replaces image occurences with the ```figure``` tag, including original 
 image and additional ```figcaption``` tag with the text read from image attributes.
 
@@ -93,4 +89,4 @@ and sends them to [Coveralls.io](https://coveralls.io/r/todvora/gitbook-plugin-i
 The tests are executed with every pushed commit on the [Travis-CI server](https://travis-ci.org/todvora/gitbook-plugin-image-captions).
 
 ### Based on
-This plugin is based on example plugin from [GitbookIO/plugin](https://github.com/GitbookIO/plugin). 
+This plugin is based on the example plugin from [GitbookIO/plugin](https://github.com/GitbookIO/plugin). 

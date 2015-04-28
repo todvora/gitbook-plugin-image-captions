@@ -23,7 +23,6 @@
     "url": "https://github.com/todvora/gitbook-plugin-image-captions/issues"
   },
   "dependencies": {
-    "cheerio": "~0.19.0",
     "underscore": "~1.8.2"
   },
   "devDependencies": {
@@ -35,7 +34,7 @@
   "scripts": {
     "lint": "jshint index.js spec/**.js",
     "pretest": "npm run lint",
-    "test": "istanbul cover jasmine-node -- spec --verbose --captureExceptions",
+    "test": "istanbul cover -x **/spec/** jasmine-node -- spec --verbose --captureExceptions",
     "coverage": "cat ./coverage/lcov.info | coveralls"
   }
 }
