@@ -1,0 +1,19 @@
+{
+  "node": true,
+
+  "curly": true,
+  "latedef": true,
+  "undef": true,
+  "unused": true,
+  "trailing": true,
+
+  "predef": [
+      "jasmine",
+      "describe",
+      "it",
+      "expect",
+      "beforeEach"
+  ]
+}
+
+

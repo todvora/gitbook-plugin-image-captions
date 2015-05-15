@@ -10,3 +10,11 @@ figcaption {
     font-style: italic;
     line-height: 1.5em;
 }
+
+.left {
+    text-align: left;
+}
+
+.right {
+    text-align: right;
+}

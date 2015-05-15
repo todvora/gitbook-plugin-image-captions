@@ -45,6 +45,20 @@ describe(__filename, function () {
      done();
   });
 
+  it('should align caption to the left', function (done) {
+     plugin.options = {
+       'pluginsConfig' : {
+         'image-captions': {
+           'align': 'left'
+         }
+       }
+     };
+     var page = {'sections':[{'type':'normal', 'content': '<img src="foo.jpg" alt="bar">'}]};
+     onPageHook.call(plugin, page); // call the hook, preserving plugin scope
+     expect(page.sections[0].content).toEqual('<figure><img src="foo.jpg" alt="bar"><figcaption class="left">Figure: bar</figcaption></figure>');
+     done();
+    });
+
   it('should prefer title attribute if available', function (done) {
     var page = {'sections':[{'type':'normal', 'content': '<img src="foo.jpg" alt="bar" title="loremipsum">'}]};
     onPageHook.call(plugin, page); // call the hook, preserving plugin scope

@@ -21,6 +21,11 @@ var insertCaptions = function(section) {
       wrapImage(alt);
     }
   });
+
+  if(options.align) {
+    $('figcaption').addClass(options.align);
+  }
+
   section.content = $.html();
 };
 
