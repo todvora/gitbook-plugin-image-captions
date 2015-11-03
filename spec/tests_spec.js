@@ -86,4 +86,32 @@ describe(__filename, function () {
     expect(page.sections[0].content).toEqual('<figure><img src="foo.jpg" alt="bar" title=""><figcaption>Figure: bar</figcaption></figure>');
     done();
   });
+
+  it('should ignore inline images (pre)', function (done) {
+    var page = {'sections':[{'type':'normal', 'content': '<p>foo <img src="foo.jpg" alt="bar"></p>'}]};
+    onPageHook.call(plugin, page); // call the hook, preserving plugin scope
+    expect(page.sections[0].content).toEqual('<p>foo <img src="foo.jpg" alt="bar"></p>');
+    done();
+  });
+
+  it('should ignore inline images (post)', function (done) {
+    var page = {'sections':[{'type':'normal', 'content': '<p><img src="foo.jpg" alt="bar"> bar</p>'}]};
+    onPageHook.call(plugin, page); // call the hook, preserving plugin scope
+    expect(page.sections[0].content).toEqual('<p><img src="foo.jpg" alt="bar"> bar</p>');
+    done();
+  });
+
+  it('should ignore inline images', function (done) {
+    var page = {'sections':[{'type':'normal', 'content': '<p>foo <img src="foo.jpg" alt="bar"> bar</p>'}]};
+    onPageHook.call(plugin, page); // call the hook, preserving plugin scope
+    expect(page.sections[0].content).toEqual('<p>foo <img src="foo.jpg" alt="bar"> bar</p>');
+    done();
+  });
+
+  it('should ignore multiple images in paragraph', function (done) {
+    var page = {'sections':[{'type':'normal', 'content': '<p><img src="foo1.jpg" alt="bar1"><img src="foo2.jpg" alt="bar2"></p>'}]};
+    onPageHook.call(plugin, page); // call the hook, preserving plugin scope
+    expect(page.sections[0].content).toEqual('<p><img src="foo1.jpg" alt="bar1"><img src="foo2.jpg" alt="bar2"></p>');
+    done();
+  });
 });
