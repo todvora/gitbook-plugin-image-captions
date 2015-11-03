@@ -8,7 +8,9 @@ var insertCaptions = function(section) {
   var $ = cheerio.load(section.content);
   $('img').each(function(i, elem) {
     var img = $(elem);
-    if (img.parent().children().length > 1 || img.parent().text() != '') return;
+    if (img.parent().children().length > 1 || img.parent().text() !== '') {
+        return;
+    }
     var wrapImage = function(caption) {
       var template = options.caption || 'Figure: _CAPTION_';
       var result = template.replace('_CAPTION_', caption);
