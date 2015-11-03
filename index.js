@@ -8,10 +8,11 @@ var insertCaptions = function(section) {
   var $ = cheerio.load(section.content);
   $('img').each(function(i, elem) {
     var img = $(elem);
+    if (img.parent().children().length > 1 || img.parent().text() != '') return;
     var wrapImage = function(caption) {
       var template = options.caption || 'Figure: _CAPTION_';
       var result = template.replace('_CAPTION_', caption);
-      img.replaceWith('<figure>' + $.html(img) + '<figcaption>'+result+'</figcaption></figure>');
+      img.parent().replaceWith('<figure>' + $.html(img) + '<figcaption>'+result+'</figcaption></figure>');
     };
     var title = img.attr('title');
     var alt = img.attr('alt');
@@ -40,7 +41,7 @@ module.exports = {
         assets: './assets',
         css: [
             'image-captions.css'
-        ],
+        ]
     },
     ebook: {
       assets: './assets',
