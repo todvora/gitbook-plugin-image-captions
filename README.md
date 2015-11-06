@@ -142,3 +142,19 @@ The tests are executed with every pushed commit on the [Travis-CI server](https:
 
 ### Based on
 This plugin is based on the example plugin from [GitbookIO/plugin](https://github.com/GitbookIO/plugin).
+
+### Changes
+
+
+#### 0.2.0
+ - Paragraphs and inline image (PR [#1](https://github.com/todvora/gitbook-plugin-image-captions/pull/1) by [@aschempp](https://github.com/aschempp))
+
+#### 0.1.0
+- figcaption text-align configurable
+
+#### 0.0.2 - 0.0.6
+- dependencies fix
+- dependencies cleanup, readme update
+- npmignore configuration
+- integration with coverage tools, readme, code cleanup
+- initial commit
