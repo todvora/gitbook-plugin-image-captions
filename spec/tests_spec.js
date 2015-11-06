@@ -11,9 +11,9 @@ describe(__filename, function () {
   var onPageHook = plugin.hooks.page;  // reference to the hook method
 
   it('should ignore all sections except \'normal\'', function (done) {
-    var page = {'sections':[{'type':'exercise', 'content': '<img src="foo.jpg" alt="bar">'},{'type':'unknown', 'content': 'aaa'}]};
+    var page = {'sections':[{'type':'exercise', 'content': '<p><img src="foo.jpg" alt="bar"></p>'},{'type':'unknown', 'content': 'aaa'}]};
     onPageHook.call(plugin, page); // call the hook, preserving plugin scope
-    expect(page.sections[0].content).toEqual('<img src="foo.jpg" alt="bar">');
+    expect(page.sections[0].content).toEqual('<p><img src="foo.jpg" alt="bar"></p>');
     done();
   });
 
@@ -25,7 +25,7 @@ describe(__filename, function () {
   });
 
   it('should create caption from alt attribute', function (done) {
-    var page = {'sections':[{'type':'normal', 'content': '<img src="foo.jpg" alt="bar">'}]};
+    var page = {'sections':[{'type':'normal', 'content': '<p><img src="foo.jpg" alt="bar"></p>'}]};
     onPageHook.call(plugin, page); // call the hook, preserving plugin scope
     expect(page.sections[0].content).toEqual('<figure><img src="foo.jpg" alt="bar"><figcaption>Figure: bar</figcaption></figure>');
     done();
@@ -39,7 +39,7 @@ describe(__filename, function () {
          }
        }
      };
-     var page = {'sections':[{'type':'normal', 'content': '<img src="foo.jpg" alt="bar">'}]};
+     var page = {'sections':[{'type':'normal', 'content': '<p><img src="foo.jpg" alt="bar"></p>'}]};
      onPageHook.call(plugin, page); // call the hook, preserving plugin scope
      expect(page.sections[0].content).toEqual('<figure><img src="foo.jpg" alt="bar"><figcaption>Image - bar</figcaption></figure>');
      done();
@@ -53,37 +53,65 @@ describe(__filename, function () {
          }
        }
      };
-     var page = {'sections':[{'type':'normal', 'content': '<img src="foo.jpg" alt="bar">'}]};
+     var page = {'sections':[{'type':'normal', 'content': '<p><img src="foo.jpg" alt="bar"></p>'}]};
      onPageHook.call(plugin, page); // call the hook, preserving plugin scope
      expect(page.sections[0].content).toEqual('<figure><img src="foo.jpg" alt="bar"><figcaption class="left">Figure: bar</figcaption></figure>');
      done();
     });
 
   it('should prefer title attribute if available', function (done) {
-    var page = {'sections':[{'type':'normal', 'content': '<img src="foo.jpg" alt="bar" title="loremipsum">'}]};
+    var page = {'sections':[{'type':'normal', 'content': '<p><img src="foo.jpg" alt="bar" title="loremipsum"></p>'}]};
     onPageHook.call(plugin, page); // call the hook, preserving plugin scope
     expect(page.sections[0].content).toEqual('<figure><img src="foo.jpg" alt="bar" title="loremipsum"><figcaption>Figure: loremipsum</figcaption></figure>');
     done();
   });
 
   it('should should ignore image without alt and title', function (done) {
-    var page = {'sections':[{'type':'normal', 'content': '<img src="foo.jpg">'}]};
+    var page = {'sections':[{'type':'normal', 'content': '<p><img src="foo.jpg"></p>'}]};
     onPageHook.call(plugin, page); // call the hook, preserving plugin scope
-    expect(page.sections[0].content).toEqual('<img src="foo.jpg">');
+    expect(page.sections[0].content).toEqual('<p><img src="foo.jpg"></p>');
     done();
   });
 
   it('should ignore images with empty alt', function (done) {
-    var page = {'sections':[{'type':'normal', 'content': '<img src="foo.jpg" alt="">'}]};
+    var page = {'sections':[{'type':'normal', 'content': '<p><img src="foo.jpg" alt=""></p>'}]};
     onPageHook.call(plugin, page); // call the hook, preserving plugin scope
-    expect(page.sections[0].content).toEqual('<img src="foo.jpg" alt="">');
+    expect(page.sections[0].content).toEqual('<p><img src="foo.jpg" alt=""></p>');
     done();
   });
 
   it('should ignore images with empty title and fallback to alt', function (done) {
-    var page = {'sections':[{'type':'normal', 'content': '<img src="foo.jpg" alt="bar" title="">'}]};
+    var page = {'sections':[{'type':'normal', 'content': '<p><img src="foo.jpg" alt="bar" title=""></p>'}]};
     onPageHook.call(plugin, page); // call the hook, preserving plugin scope
     expect(page.sections[0].content).toEqual('<figure><img src="foo.jpg" alt="bar" title=""><figcaption>Figure: bar</figcaption></figure>');
+    done();
+  });
+
+  it('should ignore inline images (pre)', function (done) {
+    var page = {'sections':[{'type':'normal', 'content': '<p>foo <img src="foo.jpg" alt="bar"></p>'}]};
+    onPageHook.call(plugin, page); // call the hook, preserving plugin scope
+    expect(page.sections[0].content).toEqual('<p>foo <img src="foo.jpg" alt="bar"></p>');
+    done();
+  });
+
+  it('should ignore inline images (post)', function (done) {
+    var page = {'sections':[{'type':'normal', 'content': '<p><img src="foo.jpg" alt="bar"> bar</p>'}]};
+    onPageHook.call(plugin, page); // call the hook, preserving plugin scope
+    expect(page.sections[0].content).toEqual('<p><img src="foo.jpg" alt="bar"> bar</p>');
+    done();
+  });
+
+  it('should ignore inline images', function (done) {
+    var page = {'sections':[{'type':'normal', 'content': '<p>foo <img src="foo.jpg" alt="bar"> bar</p>'}]};
+    onPageHook.call(plugin, page); // call the hook, preserving plugin scope
+    expect(page.sections[0].content).toEqual('<p>foo <img src="foo.jpg" alt="bar"> bar</p>');
+    done();
+  });
+
+  it('should ignore multiple images in paragraph', function (done) {
+    var page = {'sections':[{'type':'normal', 'content': '<p><img src="foo1.jpg" alt="bar1"><img src="foo2.jpg" alt="bar2"></p>'}]};
+    onPageHook.call(plugin, page); // call the hook, preserving plugin scope
+    expect(page.sections[0].content).toEqual('<p><img src="foo1.jpg" alt="bar1"><img src="foo2.jpg" alt="bar2"></p>');
     done();
   });
 });
