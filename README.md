@@ -126,7 +126,7 @@ This will automatic add image container to the book variables, so that they are 
 
 Note: it is not necessary to add pictures entry on variables, this is just to clarify usage of the image list. By defining ```variable_name``` you can make sure not to overwrite any previous book variable.
 
-So this will activate image collection on a book. All images are available on any page. Say you have a pictures.md. Then you can do:
+All images are available on any page. Say you have a ```pictures.md```. Then you can do:
 
 ```markdown
   # Pictures
@@ -138,14 +138,14 @@ So this will activate image collection on a book. All images are available on an
 
 Image properties available in addition to ```list_caption``` and ```backlink``` are:
 
-* backlink: link back to the image page containing anchor
-* list_caption: image caption get from alt or title attribute and processed for list image label
-* index: index of an image on a page aka. page wide image number
-* src: image src attribute
-* key: image key concatenated by ```page_level.index```
-* page_level: page level of the image
-* caption: image caption get from alt or title attribute
-* nro: book wide image number
+* **backlink**: link back to the image page containing anchor
+* **list_caption**: image caption get from alt or title attribute and processed for list image label
+* **index**: index of an image on a page aka. page wide image number
+* **src**: image src attribute
+* **key**: image key concatenated by ```page_level.index```
+* **page_level**: page level of the image
+* **caption**: image caption get from alt or title attribute
+* **nro**: book wide image number
 
 You can set a different caption (label) for each image on a list. This makes it possible to separate page image caption at the actual page from the label of the image on a picture list:
 
@@ -172,6 +172,8 @@ Note that new keyword ```_BOOK_IMAGE_NUMBER_``` is available if image list funct
     }
   }
 ```
+
+```_BOOK_IMAGE_NUMBER_``` variable is ```0``` if ```variable_name``` is not set ie. image list behavious is not activated.
 
 ## CSS Styles
 This plugin generates simple ```figure``` around your images:
@@ -263,7 +265,7 @@ This plugin is based on the example plugin from [GitbookIO/plugin](https://githu
 - added support for book wide and page wide image numbering
 - added support for image specific caption and attribute configuration
 - added support for image list construction by book variables
-- new template keywords: _PAGE_LEVEL_, _PAGE_IMAGE_NUMBER_, _BOOK_IMAGE_NUMBER_ in addition to _CAPTION_
+- new template keywords: ```_PAGE_LEVEL_```, ```_PAGE_IMAGE_NUMBER_```, ```_BOOK_IMAGE_NUMBER_ ```in addition to ```_CAPTION_```
 
 #### 0.2.0
  - Paragraphs and inline image (PR [#1](https://github.com/todvora/gitbook-plugin-image-captions/pull/1) by [@aschempp](https://github.com/aschempp))
