@@ -27,14 +27,11 @@
   },
   "devDependencies": {
     "jasmine-node": ">=1.14.5",
-    "istanbul": ">=0.3.13",
     "jshint": ">=2.6.3",
-    "coveralls": ">=2.11.2"
+    "gitbook-tester":">=1.0.0"
   },
   "scripts": {
     "lint": "jshint index.js spec/**.js",
-    "pretest": "npm run lint",
-    "test": "istanbul cover -x **/spec/** jasmine-node -- spec --verbose --captureExceptions",
-    "coverage": "cat ./coverage/lcov.info | coveralls"
+    "test": "jasmine-node spec --verbose --captureExceptions"
   }
 }

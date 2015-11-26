@@ -1,7 +1,6 @@
 # GitBook Image Captions Plugin
 
 [![Build Status](https://travis-ci.org/todvora/gitbook-plugin-image-captions.svg?branch=master)](https://travis-ci.org/todvora/gitbook-plugin-image-captions)
-[![Coverage Status](https://coveralls.io/repos/todvora/gitbook-plugin-image-captions/badge.svg)](https://coveralls.io/r/todvora/gitbook-plugin-image-captions)
 [![Dependencies Status](https://david-dm.org/todvora/gitbook-plugin-image-captions/status.svg)](https://david-dm.org/todvora/gitbook-plugin-image-captions/)
 [![DevDependencies Status](https://david-dm.org/todvora/gitbook-plugin-image-captions/dev-status.svg)](https://david-dm.org/todvora/gitbook-plugin-image-captions/#info=devDependencies)
 

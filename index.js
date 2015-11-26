@@ -23,7 +23,7 @@ var insertCaptions = function(section) {
         img.attr(attr, attributes[attr]);
       }
     }
-    if (options.images[key] && options.images[key].attributes) {
+    if (options.images && options.images[key] && options.images[key].attributes) {
       setAttributes(options.images[key].attributes);
     } else if(options.attributes) {
       setAttributes(options.attributes);
@@ -39,7 +39,7 @@ var insertCaptions = function(section) {
     if (caption) {
       wrapImage(caption);
       // set figure caption alignment
-      if (options.images[key] && options.images[key].align) {
+      if (options.images && options.images[key] && options.images[key].align) {
         $('figcaption').addClass(options.images[key].align);
       } else if(options.align) {
         $('figcaption').addClass(options.align);
@@ -86,7 +86,7 @@ var collectImages = function(section) {
 var createCaption = function(key, caption, options, caption_key, page_level, page_image_number, book_image_number) {
   var template = 'Figure: _CAPTION_';
   // try to get image specific template from plugin configuration options
-  if (options.images[key] && options.images[key][caption_key])
+  if (options.images && options.images[key] && options.images[key][caption_key])
     template = options.images[key][caption_key]
   // or try to get book specific template from plugin configuration options
   else if (options[caption_key])
