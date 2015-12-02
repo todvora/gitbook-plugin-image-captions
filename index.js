@@ -28,8 +28,9 @@ var createCaption = function(key, caption, options, caption_key, page_level, pag
   return result;
 };
 
-var insertCaptions = function(section) {
+var insertCaptions = function(page, section) {
   var options = this.options.pluginsConfig['image-captions'] || {};
+  var page_level = page.progress.current.level;
   // process section content with jquery lib
   var $ = cheerio.load(section.content);
   // get all images from section content
@@ -38,7 +39,7 @@ var insertCaptions = function(section) {
     if (img.parent().children().length > 1 || img.parent().text() !== '') {
         return;
     }
-    var key = section.page_level + '.' + (i+1);
+    var key = page_level + '.' + (i+1);
     // set image attributes
     var setAttributes = function(attributes) {
       for (var attr in attributes) {
@@ -56,7 +57,7 @@ var insertCaptions = function(section) {
       if (images[key] && images[key].nro) {
         nro = images[key].nro;
       }
-      var result = createCaption(key, caption, options, 'caption', section.page_level, i, nro);
+      var result = createCaption(key, caption, options, 'caption', page_level, i, nro);
       img.parent().replaceWith('<figure id="fig'+key+'">' + $.html(img) + '<figcaption>'+result+'</figcaption></figure>');
     };
     var caption = img.attr('title') || img.attr('alt');
@@ -166,10 +167,9 @@ module.exports = {
       },
       'page': function(page) { // after page has been converted to html
         page.sections.filter(function(section) {
-          section.page_level = page.progress.current.level;
           return section.type == 'normal';
         })
-        .forEach(insertCaptions, this);
+        .forEach(insertCaptions.bind(this, page));
         return page;
       }
     }
