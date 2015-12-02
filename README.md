@@ -25,7 +25,7 @@ If you're building your book locally, download an prepare plugins simply by runn
 
 ## Configuration
 The plugin provides reasonable defaults and you don't need to config anything.
-However there are two config values, you can use to adapt captions to your needs:
+However there are several config values, you can use to adapt captions to your needs:
 
 ### Caption text
 
@@ -249,9 +249,9 @@ Important part of this plugin is the test suite. You can run the test with comma
 npm test
 ```
 
-The test suite includes [JSHint](https://www.npmjs.com/package/jshint) validation of the plugin and test suite itself. Then the [Jasmine](https://www.npmjs.com/package/jasmine-node) tests are executed,
-validating expected plugin bahavior. To be sure, that all of the code is covered, [Istanbul](https://github.com/gotwarlost/istanbul) generates coverage reports
-and sends them to [Coveralls.io](https://coveralls.io/r/todvora/gitbook-plugin-image-captions) service.
+The test suite includes [JSHint](https://www.npmjs.com/package/jshint) validation of the plugin and test suite itself.
+Then the [Mocha](https://mochajs.org/) integration tests are executed, validating expected plugin bahavior.
+Integration tests use [gitbook-tester](https://www.npmjs.com/package/gitbook-tester).
 
 The tests are executed with every pushed commit on the [Travis-CI server](https://travis-ci.org/todvora/gitbook-plugin-image-captions).
 
@@ -266,8 +266,12 @@ This plugin is based on the example plugin from [GitbookIO/plugin](https://githu
 - added support for image list construction by book variables
 - new template keywords: ```_PAGE_LEVEL_```, ```_PAGE_IMAGE_NUMBER_```, ```_BOOK_IMAGE_NUMBER_ ```in addition to ```_CAPTION_```
 
+Thanks [@markomanninen](https://github.com/markomanninen) for all new features!
+
 #### 0.2.0
- - Paragraphs and inline image (PR [#1](https://github.com/todvora/gitbook-plugin-image-captions/pull/1) by [@aschempp](https://github.com/aschempp))
+ - Paragraphs and inline image
+
+Thanks [@aschempp](https://github.com/aschempp) for PR [#1](https://github.com/todvora/gitbook-plugin-image-captions/pull/1) and new test cases!
 
 #### 0.1.0
 - figcaption text-align configurable

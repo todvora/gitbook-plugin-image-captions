@@ -1,14 +1,16 @@
 var fs = require('fs');
 var path = require('path');
 var tester = require('gitbook-tester');
+var assert = require('assert');
+
+// process.env.DEBUG = true;
 
 var thisModulePath = path.join(__dirname, '..');
 
 function basicBuild(content) {
   return tester.builder()
     .withContent(content)
-    .withBookJson({"plugins": ["image-captions"]})
-    .withLocalPlugin(thisModulePath, 'gitbook-plugin-image-captions')
+    .withLocalPlugin(thisModulePath)
     .create();
 }
 
@@ -16,26 +18,22 @@ function readFile(filename) {
   return fs.readFileSync(path.join(__dirname, 'resources', filename), 'utf-8').trim();
 }
 
-describe(__filename, function() {
-  it('should not change content without images', function(testDone) {
-    basicBuild('#heading\n\nparagraph')
+describe('gitbook-plugin-image-captions', function() {
+  it('should not change content without images', function() {
+    return basicBuild('#heading\n\nparagraph')
       .then(function(results){
-        expect(results[0].content).toEqual('<h1 id="heading">heading</h1>\n<p>paragraph</p>');
-      })
-      .fin(testDone)
-      .done();
+        assert.equal(results[0].content, '<h1 id="heading">heading</h1>\n<p>paragraph</p>');
+      });
   });
 
-  it('should create caption from alt attribute', function(testDone) {
-   basicBuild('![bar](foo.jpg)')
+  it('should create caption from alt attribute', function() {
+   return basicBuild('![bar](foo.jpg)')
     .then(function(results){
-    expect(results[0].content).toEqual('<figure><img src="foo.jpg" alt="bar"><figcaption>Figure: bar</figcaption></figure>');
-    })
-    .fin(testDone)
-    .done();
+      assert.equal(results[0].content, '<figure id="fig0.1"><img src="foo.jpg" alt="bar"><figcaption>Figure: bar</figcaption></figure>');
+    });
   });
 
-  it('should read caption format from option', function(testDone) {
+  it('should read caption format from option', function() {
 
     var config = {
       plugins: ['image-captions'],
@@ -44,19 +42,17 @@ describe(__filename, function() {
       }
     };
 
-   tester.builder()
+   return tester.builder()
     .withContent('![bar](foo.jpg)')
     .withBookJson(config)
-    .withLocalPlugin(thisModulePath, 'gitbook-plugin-image-captions')
+    .withLocalPlugin(thisModulePath)
     .create()
     .then(function(results){
-      expect(results[0].content).toEqual('<figure><img src="foo.jpg" alt="bar"><figcaption>Image - bar</figcaption></figure>');
-    })
-    .fin(testDone)
-    .done();
+       assert.equal(results[0].content, '<figure id="fig0.1"><img src="foo.jpg" alt="bar"><figcaption>Image - bar</figcaption></figure>');
+    });
   });
 
-  it('should align caption to the left', function(testDone) {
+  it('should align caption to the left', function() {
 
     var config = {
       plugins: ['image-captions'],
@@ -65,84 +61,68 @@ describe(__filename, function() {
       }
     };
 
-    tester.builder()
+    return tester.builder()
      .withContent('![bar](foo.jpg)')
      .withBookJson(config)
-     .withLocalPlugin(thisModulePath, 'gitbook-plugin-image-captions')
+     .withLocalPlugin(thisModulePath)
      .create()
      .then(function(results){
-       expect(results[0].content).toEqual('<figure><img src="foo.jpg" alt="bar"><figcaption class="left">Figure: bar</figcaption></figure>');
-     })
-     .fin(testDone)
-    .done();
+       assert.equal(results[0].content, '<figure id="fig0.1"><img src="foo.jpg" alt="bar"><figcaption class="left">Figure: bar</figcaption></figure>');
+     });
   });
 
 
-  it('should prefer title attribute if available', function(testDone) {
-    basicBuild('![alt text](img.jpg "title text")')
+  it('should prefer title attribute if available', function() {
+    return basicBuild('![alt text](img.jpg "title text")')
      .then(function(results){
-       expect(results[0].content).toEqual('<figure><img src="img.jpg" alt="alt text" title="title text"><figcaption>Figure: title text</figcaption></figure>');
-     })
-     .fin(testDone)
-    .done();
+       assert.equal(results[0].content, '<figure id="fig0.1"><img src="img.jpg" alt="alt text" title="title text"><figcaption>Figure: title text</figcaption></figure>');
+     });
   });
 
-  it('should ignore images with empty alt', function(testDone) {
-    basicBuild('![](img.jpg)')
+  it('should ignore images with empty alt', function() {
+    return basicBuild('![](img.jpg)')
      .then(function(results){
-       expect(results[0].content).toEqual('<p><img src="img.jpg" alt=""></p>');
-     })
-     .fin(testDone)
-    .done();
+       assert.equal(results[0].content, '<p><img src="img.jpg" alt=""></p>');
+     });
   });
 
-  it('should ignore images with empty title and fallback to alt', function(testDone) {
-    basicBuild('![bar](img.jpg "")')
+  it('should ignore images with empty title and fallback to alt', function() {
+    return basicBuild('![bar](img.jpg "")')
      .then(function(results){
-       expect(results[0].content).toEqual('<figure><img src="img.jpg" alt="bar"><figcaption>Figure: bar</figcaption></figure>');
-     })
-     .fin(testDone)
-    .done();
+       assert.equal(results[0].content, '<figure id="fig0.1"><img src="img.jpg" alt="bar"><figcaption>Figure: bar</figcaption></figure>');
+     });
   });
 
-  it('should ignore inline images (pre)', function(testDone) {
-    basicBuild('foo ![bar](img.jpg)')
+  it('should ignore inline images (pre)', function() {
+    return basicBuild('foo ![bar](img.jpg)')
      .then(function(results){
-       expect(results[0].content).toEqual('<p>foo <img src="img.jpg" alt="bar"></p>');
-     })
-     .fin(testDone)
-    .done();
+       assert.equal(results[0].content, '<p>foo <img src="img.jpg" alt="bar"></p>');
+     });
   });
 
-  it('should ignore inline images (post)', function(testDone) {
-    basicBuild('![bar](img.jpg) bar')
+  it('should ignore inline images (post)', function() {
+    return basicBuild('![bar](img.jpg) bar')
      .then(function(results){
-       expect(results[0].content).toEqual('<p><img src="img.jpg" alt="bar"> bar</p>');
-     })
-     .fin(testDone)
-    .done();
+       assert.equal(results[0].content, '<p><img src="img.jpg" alt="bar"> bar</p>');
+     });
   });
 
-  it('should ignore inline images', function(testDone) {
-    basicBuild('foo ![bar](img.jpg) bar')
+  it('should ignore inline images', function() {
+    return basicBuild('foo ![bar](img.jpg) bar')
      .then(function(results){
-       expect(results[0].content).toEqual('<p>foo <img src="img.jpg" alt="bar"> bar</p>');
-     })
-     .fin(testDone)
-    .done();
+       assert.equal(results[0].content, '<p>foo <img src="img.jpg" alt="bar"> bar</p>');
+     });
   });
 
-  it('should ignore multiple images in paragraph', function(testDone) {
-    basicBuild('![bar1](foo1.jpg)![bar2](foo2.jpg)')
+  it('should ignore multiple images in paragraph', function() {
+    return basicBuild('![bar1](foo1.jpg)![bar2](foo2.jpg)')
      .then(function(results){
-       expect(results[0].content).toEqual('<p><img src="foo1.jpg" alt="bar1"><img src="foo2.jpg" alt="bar2"></p>');
-     })
-     .fin(testDone)
-    .done();
+       assert.equal(results[0].content, '<p><img src="foo1.jpg" alt="bar1"><img src="foo2.jpg" alt="bar2"></p>');
+     });
   });
 
 
-  it('should handle page numbers', function(testDone) {
+  it('should handle page numbers', function() {
     var config = {
       plugins: ['image-captions'],
       pluginsConfig: {
@@ -152,20 +132,18 @@ describe(__filename, function() {
       }
     };
 
-    tester.builder()
+    return tester.builder()
      .withContent('![bar](foo.jpg)')
      .withBookJson(config)
-     .withLocalPlugin(thisModulePath, 'gitbook-plugin-image-captions')
+     .withLocalPlugin(thisModulePath)
      .create()
      .then(function(results){
-       expect(results[0].content).toEqual('<figure><img src="foo.jpg" alt="bar"><figcaption>Image 0.1 - bar</figcaption></figure>');
-     })
-     .fin(testDone)
-    .done();
+       assert.equal(results[0].content, '<figure id="fig0.1"><img src="foo.jpg" alt="bar"><figcaption>Image 0.1 - bar</figcaption></figure>');
+     });
   });
 
 
-  it('should render registry of figures', function(testDone) {
+  it('should render registry of figures', function() {
     var config = {
       plugins: ['image-captions'],
       pluginsConfig: {
@@ -178,19 +156,17 @@ describe(__filename, function() {
     var pageContent = readFile('image_registry_provided.md');
     var expected = readFile('image_registry_expected.html');
 
-    tester.builder()
+    return tester.builder()
      .withContent(pageContent)
      .withBookJson(config)
-     .withLocalPlugin(thisModulePath, 'gitbook-plugin-image-captions')
+     .withLocalPlugin(thisModulePath)
      .create()
      .then(function(results){
-       expect(results[0].content).toEqual(expected);
-     })
-     .fin(testDone)
-    .done();
+       assert.equal(expected, results[0].content);
+     });
   });
 
-  it('should render image global index', function(testDone) {
+  it('should render image global index', function() {
     var config = {
       plugins: ['image-captions'],
       pluginsConfig: {
@@ -204,16 +180,97 @@ describe(__filename, function() {
     var pageContent = readFile('image_bookwide_caption_provided.md');
     var expected = readFile('image_bookwide_caption_expected.html');
 
-    tester.builder()
+    return tester.builder()
      .withContent(pageContent)
      .withBookJson(config)
-     .withLocalPlugin(thisModulePath, 'gitbook-plugin-image-captions')
+     .withLocalPlugin(thisModulePath)
      .create()
      .then(function(results){
-       expect(results[0].content).toEqual(expected);
-     })
-     .fin(testDone)
-    .done();
+       assert.equal(expected, results[0].content);
+     });
 
   });
+
+  it('should use image specific caption', function() {
+    var config = {
+      plugins: ['image-captions'],
+      pluginsConfig: {
+        'image-captions': {
+          'images': {
+            '0.1': {
+              'caption': "Special image _PAGE_LEVEL_._PAGE_IMAGE_NUMBER_: _CAPTION_"
+            }
+          }
+        }
+      }
+    };
+
+    return tester.builder()
+     .withContent('![bar](foo.jpg)')
+     .withBookJson(config)
+     .withLocalPlugin(thisModulePath)
+     .create()
+     .then(function(results){
+       assert.equal(results[0].content, '<figure id="fig0.1"><img src="foo.jpg" alt="bar"><figcaption>Special image 0.1: bar</figcaption></figure>');
+     });
+  });
+
+  it('should use different caption for figure and for list', function() {
+    var config = {
+      plugins: ['image-captions'],
+      pluginsConfig: {
+        'image-captions': {
+          'variable_name': 'pictures',
+          'list_caption': 'List image _BOOK_IMAGE_NUMBER_: _CAPTION_'
+        }
+      }
+    };
+
+    var pageContent = readFile('image_registry_provided.md');
+    var expected = readFile('image_list_captions_expected.html');
+
+    return tester.builder()
+     .withContent(pageContent)
+     .withBookJson(config)
+     .withLocalPlugin(thisModulePath)
+     .create()
+     .then(function(results){
+       assert.equal(expected, results[0].content);
+     });
+
+  });
+
+  it('pass default and specific image attributes', function() {
+    var config = {
+      plugins: ['image-captions'],
+      pluginsConfig: {
+        'image-captions': {
+          'attributes': { 'width': '300' },
+          'images': {
+            '0.2': {
+              'attributes': {
+                'width': '400'
+              }
+            }
+          }
+        }
+      }
+    };
+
+    var pageContent = readFile('image_attributes_provided.md');
+    var expected = readFile('image_attributes_expected.html');
+
+    return tester.builder()
+     .withContent(pageContent)
+     .withBookJson(config)
+     .withLocalPlugin(thisModulePath)
+     .create()
+     .then(function(results){
+       assert.equal(expected, results[0].content);
+     });
+
+  });
+
+
+
 });

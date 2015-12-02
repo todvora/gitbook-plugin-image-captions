@@ -23,15 +23,16 @@
     "url": "https://github.com/todvora/gitbook-plugin-image-captions/issues"
   },
   "dependencies": {
-    "cheerio": "~0.19.0"
+    "cheerio": "~0.19.0",
+    "q": "^1.4.1"
   },
   "devDependencies": {
-    "jasmine-node": ">=1.14.5",
+    "mocha": "2.3.4",
     "jshint": ">=2.6.3",
-    "gitbook-tester":">=1.0.0"
+    "gitbook-tester": "1.0.4"
   },
   "scripts": {
-    "lint": "jshint index.js spec/**.js",
-    "test": "jasmine-node spec --verbose --captureExceptions"
+    "pretest": "jshint index.js spec/**.js",
+    "test": "node_modules/.bin/mocha --reporter spec --timeout 15000 spec"
   }
 }
