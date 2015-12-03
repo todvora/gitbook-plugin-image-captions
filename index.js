@@ -71,12 +71,11 @@ var insertCaptions = function(page, section) {
       }
     }
   });
-
   // reassign section content
   section.content = $.html();
 };
 
-var collectImages = function(section, page) {
+var collectImages = function(section, page, that) {
   var $ = cheerio.load(section.content);
   $('img').each(function(i, elem) {
     var img = $(elem);
@@ -105,6 +104,9 @@ var collectImages = function(section, page) {
         // caption from image title / alt
         list_caption: null
       };
+      images[key].nro = that.config.book.options.variables[that.options.pluginsConfig['image-captions'].variable_name].length+1;
+      images[key].list_caption = createCaption(key, caption, that.options.pluginsConfig['image-captions'], 'list_caption', level, i, images[key].nro);
+      that.config.book.options.variables[that.options.pluginsConfig['image-captions'].variable_name].push(images[key]);
     }
   });
 };
@@ -131,39 +133,32 @@ module.exports = {
     hooks: {
       'init': function() { // before book pages has been converted to html
         var that = this;
-        var options = that.options.pluginsConfig['image-captions'] || {};
+        if(!that.options.pluginsConfig['image-captions']) {
+          that.options.pluginsConfig['image-captions'] = {};
+        }
+        var options = that.options.pluginsConfig['image-captions'];
         options.variable_name = options.variable_name || '_pictures';
-        var files = Object.keys(that.navigation);
         that.config.book.options.variables[options.variable_name] = [];
         // iterate each files found from navigation instance
-
-        var promises = files.map(function(file) {
-          return that.parsePage(file)
+        var files = Object.keys(that.navigation).map(function(key) {
+          return {key: key, order: parseInt(that.navigation[key].index)};
+        });
+        var promises = files.sort(function(a, b) {
+          return a.order - b.order;
+        })
+        .map(function(file) {
+          return that.parsePage(file.key)
             .then(function(page) {
               return page.sections.filter(function(section) {
                 // get only normal sections?
                 return section.type == 'normal';
               })
-            .map(function(item){
-              return collectImages(item, page);
-            }, that);
+            .map(function(item) {
+              return collectImages(item, page, that);
+            });
           });
         });
-
-        return Q.all(promises).then(function() {
-            // set book wide order number of the images
-            var keys = Object.keys(images);
-            keys.sort();
-            for (var i=0; i<keys.length; i++) {
-              var key = keys[i];
-              // image number is accessible from each figure caption part also.
-              images[key].nro = i+1;
-              images[key].list_caption = createCaption(key, images[key].caption, options, 'list_caption', images[key].page_level, images[key].index, images[key].nro);
-              // add image captions to book variables so they can be used on any page template,
-              // for example pictures.md
-              that.config.book.options.variables[options.variable_name].push(images[key]);
-            }
-        });
+        return Q.all(promises);
       },
       'page': function(page) { // after page has been converted to html
         page.sections.filter(function(section) {
