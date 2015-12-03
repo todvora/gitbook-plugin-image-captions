@@ -75,7 +75,8 @@ var insertCaptions = function(page, section) {
   section.content = $.html();
 };
 
-var collectImages = function(section, page, that) {
+var collectImages = function(page, section) {
+  var that = this;
   var $ = cheerio.load(section.content);
   $('img').each(function(i, elem) {
     var img = $(elem);
@@ -140,10 +141,10 @@ module.exports = {
         options.variable_name = options.variable_name || '_pictures';
         that.config.book.options.variables[options.variable_name] = [];
         // iterate each files found from navigation instance
-        var files = Object.keys(that.navigation).map(function(key) {
+        var promises = Object.keys(that.navigation).map(function(key) {
           return {key: key, order: parseInt(that.navigation[key].index)};
-        });
-        var promises = files.sort(function(a, b) {
+        })
+        .sort(function(a, b) {
           return a.order - b.order;
         })
         .map(function(file) {
@@ -153,9 +154,7 @@ module.exports = {
                 // get only normal sections?
                 return section.type == 'normal';
               })
-            .map(function(item) {
-              return collectImages(item, page, that);
-            });
+            .map(collectImages.bind(that, page));
           });
         });
         return Q.all(promises);
