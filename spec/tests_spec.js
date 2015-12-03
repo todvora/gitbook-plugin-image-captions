@@ -240,7 +240,7 @@ describe('gitbook-plugin-image-captions', function() {
 
   });
 
-  it('pass default and specific image attributes', function() {
+  it('should pass default and specific image attributes', function() {
     var config = {
       plugins: ['image-captions'],
       pluginsConfig: {
