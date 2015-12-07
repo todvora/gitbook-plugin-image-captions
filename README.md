@@ -8,7 +8,7 @@ Add nice generated captions to your book images. This plugin converts ```alt``` 
 
 ![rendered page](https://raw.github.com/todvora/gitbook-plugin-image-captions/master/preview.jpg)
 
-##Online demo
+## Online demo
 → http://tdvorak.gitbooks.io/test-book/content/phetchaburi.html
 
 ## Instalation
@@ -41,6 +41,24 @@ If you want to configure the caption text, you can provide your own template in 
 The keyword ```_CAPTION_``` will be automatically replaced by the title or alt of your image
 (the plugin uses first ```title```, if not found, then ```alt``` attribute).
 
+### Page level and image number
+
+Keywords ```_PAGE_LEVEL_```, ```_PAGE_IMAGE_NUMBER_``` and ```_BOOK_IMAGE_NUMBER_``` are available.
+
+```json
+  "pluginsConfig": {
+      "image-captions": {
+          "caption": "Image _PAGE_LEVEL_._PAGE_IMAGE_NUMBER_ - _CAPTION_"
+      }
+  }
+```
+
+Available variables in the caption text:
+
+- ```_PAGE_LEVEL_```: for example ```1.2```. Follows chapters numbering.
+- ```_PAGE_IMAGE_NUMBER_```: sequence number of the image in the chapter. First image in chapter gets value ```1```.
+- ```_BOOK_IMAGE_NUMBER_```: sequence number of the image in the whole book. First image in book gets value ```1```.
+
 ### Text align
 The image caption is by default aligned to the center. You can override this setting by providing config property ```align``` with one of the values:
 
@@ -57,18 +75,6 @@ This will align the caption to the left:
   }
 ```
 
-### Page level and image number
-
-Keywords ```_PAGE_LEVEL_``` and ```_PAGE_IMAGE_NUMBER_``` are available.
-
-```json
-  "pluginsConfig": {
-      "image-captions": {
-          "caption": "Image _PAGE_LEVEL_._PAGE_IMAGE_NUMBER_ - _CAPTION_"
-      }
-  }
-```
-
 ### Image specific captions
 
 You can set up caption template for a specific image by image level. Level is constructed from page level and image order so that on subpage 1.2 second image level is: ```1.2.2```. That can be used as an index on configuration:
@@ -78,7 +84,7 @@ You can set up caption template for a specific image by image level. Level is co
     "image-captions": {
       "images": {
         "1.2.2": {
-          "caption": "This is a spefial image: _CAPTION_"
+          "caption": "This is a special image: _CAPTION_"
         }
       }
     }
@@ -157,7 +163,7 @@ You can set a different caption (label) for each image on a list. This makes it 
   }
 ```
 
-Note that new keyword ```_BOOK_IMAGE_NUMBER_``` is available if image list functionality is set on. And you also can set a specific image caption / label as well:
+You can set a specific image caption / label as well:
 
 ```json
   "pluginsConfig": {
@@ -171,8 +177,6 @@ Note that new keyword ```_BOOK_IMAGE_NUMBER_``` is available if image list funct
     }
   }
 ```
-
-```_BOOK_IMAGE_NUMBER_``` variable is ```0``` if ```variable_name``` is not set ie. image list behavious is not activated.
 
 ## CSS Styles
 This plugin generates simple ```figure``` around your images:
