@@ -264,6 +264,12 @@ This plugin is based on the example plugin from [GitbookIO/plugin](https://githu
 
 ### Changes
 
+#### 0.3.1
+- Fixed figure inside a link ([#4](https://github.com/todvora/gitbook-plugin-image-captions/issues/4))
+
+Thanks [@michaellwest](https://github.com/michaellwest) for reporting this issue!
+
+
 #### 0.3.0
 - added support for book wide and page wide image numbering
 - added support for image specific caption and attribute configuration
