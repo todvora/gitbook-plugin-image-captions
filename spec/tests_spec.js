@@ -271,6 +271,12 @@ describe('gitbook-plugin-image-captions', function() {
 
   });
 
+  it('should handle image inside link', function() {
+    return basicBuild('[![SPE Remoting Module](http://img.youtube.com/vi/fGvT8eDdWrg/0.jpg)](http://www.youtube.com/watch?v=fGvT8eDdWrg "Click for a quick demo")')
+     .then(function(results){
+       assert.equal(results[0].content, '<a href="http://www.youtube.com/watch?v=fGvT8eDdWrg" title="Click for a quick demo" target="_blank"><figure id="fig0.1"><img src="http://img.youtube.com/vi/fGvT8eDdWrg/0.jpg" alt="SPE Remoting Module"><figcaption>Figure: SPE Remoting Module</figcaption></figure></a>');
+     });
+  });
 
 
 });

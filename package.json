@@ -29,7 +29,7 @@
   "devDependencies": {
     "mocha": "2.3.4",
     "jshint": ">=2.6.3",
-    "gitbook-tester": "1.0.4"
+    "gitbook-tester": "1.2.0"
   },
   "scripts": {
     "pretest": "jshint index.js spec/**.js",

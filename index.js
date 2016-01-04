@@ -58,7 +58,16 @@ var insertCaptions = function(page, section) {
         nro = images[key].nro;
       }
       var result = createCaption(key, caption, options, 'caption', page_level, i, nro);
-      img.parent().replaceWith('<figure id="fig'+key+'">' + $.html(img) + '<figcaption>'+result+'</figcaption></figure>');
+      var imageParent = img.parent();
+      var figure = '<figure id="fig'+key+'">' + $.html(img) + '<figcaption>'+result+'</figcaption></figure>';
+      if(imageParent[0].tagName === 'p') {
+          // the image is wrapped only by a paragraph
+          imageParent.replaceWith(figure);
+      } else {
+        // the image is wrapped by a link and this link is then wrapped by a paragraph
+        img.replaceWith(figure);
+        imageParent.parent().replaceWith(imageParent);
+      }
     };
     var caption = img.attr('title') || img.attr('alt');
     if (caption) {
