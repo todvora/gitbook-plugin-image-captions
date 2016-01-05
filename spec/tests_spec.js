@@ -162,7 +162,7 @@ describe('gitbook-plugin-image-captions', function() {
      .withLocalPlugin(thisModulePath)
      .create()
      .then(function(results){
-       assert.equal(expected, results[0].content);
+       assert.equal(results[0].content, expected);
      });
   });
 
@@ -186,7 +186,7 @@ describe('gitbook-plugin-image-captions', function() {
      .withLocalPlugin(thisModulePath)
      .create()
      .then(function(results){
-       assert.equal(expected, results[0].content);
+       assert.equal(results[0].content, expected);
      });
 
   });
@@ -235,7 +235,7 @@ describe('gitbook-plugin-image-captions', function() {
      .withLocalPlugin(thisModulePath)
      .create()
      .then(function(results){
-       assert.equal(expected, results[0].content);
+       assert.equal(results[0].content, expected);
      });
 
   });
@@ -266,7 +266,7 @@ describe('gitbook-plugin-image-captions', function() {
      .withLocalPlugin(thisModulePath)
      .create()
      .then(function(results){
-       assert.equal(expected, results[0].content);
+       assert.equal(results[0].content, expected);
      });
 
   });
