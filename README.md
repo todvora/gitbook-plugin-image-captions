@@ -4,15 +4,15 @@
 [![Dependencies Status](https://david-dm.org/todvora/gitbook-plugin-image-captions/status.svg)](https://david-dm.org/todvora/gitbook-plugin-image-captions/)
 [![DevDependencies Status](https://david-dm.org/todvora/gitbook-plugin-image-captions/dev-status.svg)](https://david-dm.org/todvora/gitbook-plugin-image-captions/#info=devDependencies)
 
-Add nice generated captions to your book images. This plugin converts ```alt``` or ```title``` attributes of your images into the captions. Works both in GitBook website and generated book (pdf, mobi).
+Add nice generated captions to your book images. This plugin converts ```alt``` or ```title``` attributes of your images into the captions. Works on both the GitBook website and your own generated book (pdf, mobi).
 
 ![rendered page](https://raw.github.com/todvora/gitbook-plugin-image-captions/master/preview.jpg)
 
 ## Online demo
 → http://tdvorak.gitbooks.io/test-book/content/phetchaburi.html
 
-## Instalation
-In your book.json add plugin like this:
+## Installation
+In your book.json add the plugin:
 ```json
 {
     "plugins": [
@@ -21,11 +21,11 @@ In your book.json add plugin like this:
 }
 ```
 
-If you're building your book locally, download an prepare plugins simply by running: ```gitbook install```.
+If you're building your book locally, download and prepare plugins by simply running ```gitbook install```.
 
 ## Configuration
-The plugin provides reasonable defaults and you don't need to config anything.
-However there are several config values, you can use to adapt captions to your needs:
+The plugin provides reasonable defaults and configuration is not needed.
+However, there are several config values you can use to adapt captions to your needs:
 
 ### Caption text
 
@@ -38,7 +38,7 @@ If you want to configure the caption text, you can provide your own template in 
   }
 ```
 
-The keyword ```_CAPTION_``` will be automatically replaced by the title or alt of your image
+The keyword ```_CAPTION_``` will be automatically replaced by the `title` or `alt` of your image
 (the plugin uses first ```title```, if not found, then ```alt``` attribute).
 
 ### Page level and image number
@@ -59,8 +59,8 @@ Available variables in the caption text:
 - ```_PAGE_IMAGE_NUMBER_```: sequence number of the image in the chapter. First image in chapter gets value ```1```.
 - ```_BOOK_IMAGE_NUMBER_```: sequence number of the image in the whole book. First image in book gets value ```1```.
 
-### Text align
-The image caption is by default aligned to the center. You can override this setting by providing config property ```align``` with one of the values:
+### Text alignment
+The image caption is by default aligned to the center. You can override this setting by providing a config property ```align``` with one of the values:
 
 - ```left```
 - ```right```
@@ -93,7 +93,7 @@ You can set up caption template for a specific image by image level. Level is co
 
 ### Additional image attributes
 
-Similarly you can specify image tag attributes generally and according to image level:
+Similarly, you can specify image tag attributes globally or at specific image levels:
 
 ```json
   "pluginsConfig": {
@@ -112,7 +112,7 @@ Similarly you can specify image tag attributes generally and according to image 
 
 ### Image list
 
-By the version 0.3.0 image list is available from book variables. You need to define variable name:
+As of version `0.3.0`, image list is available from book variables. You need to define a variable name:
 
 ```json
   "pluginsConfig": {
@@ -129,9 +129,9 @@ This will automatic add image container to the book variables, so that they are 
     }
 ```
 
-Note: it is not necessary to add pictures entry on variables, this is just to clarify usage of the image list. By defining ```variable_name``` you can make sure not to overwrite any previous book variable.
+Note: it is not necessary to add pictures entry on variables.  This is just to clarify usage of the image list. By defining ```variable_name```, you can make sure not to overwrite any previous book variable.
 
-All images are available on any page. Say you have a ```pictures.md```. Then you can do:
+All images are available on any page. Say you have a ```pictures.md```, you can do:
 
 ```markdown
   # Pictures
@@ -203,7 +203,7 @@ figcaption {
     line-height: 1.5em;
 }
 ```
-How to attach your own styles can you read on [help.gitbook.com](http://help.gitbook.com/format/configuration.html).
+You can attach your own styles by following the guide on [help.gitbook.com](http://help.gitbook.com/format/configuration.html).
 
 First, you have to create your own css file - for example ```website.css```. Then add
 your definitions of ```figure``` and ```caption```. You can change the text align, colors,
