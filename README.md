@@ -264,6 +264,12 @@ This plugin is based on the example plugin from [GitbookIO/plugin](https://githu
 
 ### Changes
 
+#### 0.3.2
+- Readme spelling and grammar fixes ([#5](https://github.com/todvora/gitbook-plugin-image-captions/pull/5))
+- Fixed possible issue with processing pages (promises) ([#6](https://github.com/todvora/gitbook-plugin-image-captions/issues/6))
+
+Thanks [@klauern](https://github.com/klauern) for #5 and [@markomanninen](https://github.com/markomanninen) for #6
+
 #### 0.3.1
 - Fixed figure inside a link ([#4](https://github.com/todvora/gitbook-plugin-image-captions/issues/4))
 
