@@ -156,16 +156,18 @@ module.exports = {
         .sort(function(a, b) {
           return a.order - b.order;
         })
-        .map(function(file) {
-          return that.parsePage(file.key)
-            .then(function(page) {
-              return page.sections.filter(function(section) {
-                // get only normal sections?
-                return section.type == 'normal';
-              })
-            .map(collectImages.bind(that, page));
+        .reduce(function(previous, file) {
+          return previous.then(function () {
+            return that.parsePage(file.key)
+              .then(function(page) {
+                return page.sections.filter(function(section) {
+                  // get only normal sections?
+                  return section.type == 'normal';
+                })
+              .map(collectImages.bind(that, page));
+            });
           });
-        });
+         }, new Q());
         return Q.all(promises);
       },
       'page': function(page) { // after page has been converted to html
