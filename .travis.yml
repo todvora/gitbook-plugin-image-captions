@@ -1,7 +1,14 @@
 language: node_js
 sudo: false
 node_js:
-  - "0.12"
-
+- '0.12'
 before_script:
-  - npm install -g gitbook-cli
+- npm install -g gitbook-cli
+deploy:
+  provider: npm
+  email: todvora@gmail.com
+  api_key:
+    secure: W2yYn+A6i/t0lJY9ikIHisv3sUE1AWei1HcXMssJYFox/qLBvyXHl4SXdM0lPGaQOS/y9kt13Lo2SMv2J8KS4MPxEiLcYEyFNz0XdpR9swbeg2t6RirsCZcqCoSGx66sI1w3jv9N2tWCnrZBpL62m2yoKldmpgXHIwnwLEMySvU=
+  on:
+    tags: true
+    repo: todvora/gitbook-plugin-image-captions
