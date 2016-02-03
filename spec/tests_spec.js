@@ -3,8 +3,6 @@ var path = require('path');
 var tester = require('gitbook-tester');
 var assert = require('assert');
 
-// process.env.DEBUG = true;
-
 var thisModulePath = path.join(__dirname, '..');
 
 function basicBuild(content) {
@@ -278,5 +276,31 @@ describe('gitbook-plugin-image-captions', function() {
      });
   });
 
+  it('should keep order of images and their global indexes', function() {
+    var config = {
+      plugins: ['image-captions'],
+      pluginsConfig: {
+        'image-captions': {
+          variable_name: 'pictures',
+          caption: 'Image _BOOK_IMAGE_NUMBER_. - _CAPTION_'
+        }
+      }
+    };
+
+    return tester.builder()
+     .withContent('![first](first.jpg)')
+     .withPage('second','![second](second.jpg)')
+     .withPage('third','![third](third.jpg)\n\n![fourth](fourth.jpg)')
+     .withBookJson(config)
+     .withLocalPlugin(thisModulePath)
+     .create()
+     .then(function(results){
+       assert.equal(results.get('index.html').content, '<figure id="fig0.1"><img src="first.jpg" alt="first"><figcaption>Image 1. - first</figcaption></figure>');
+       assert.equal(results.get('second.html').content, '<figure id="fig1.1"><img src="second.jpg" alt="second"><figcaption>Image 2. - second</figcaption></figure>');
+       assert.equal(results.get('third.html').content, '<figure id="fig2.1"><img src="third.jpg" alt="third"><figcaption>Image 3. - third</figcaption></figure>' +
+       '\n' + '<figure id="fig2.2"><img src="fourth.jpg" alt="fourth"><figcaption>Image 4. - fourth</figcaption></figure>');
+     });
+
+  });
 
 });

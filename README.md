@@ -3,6 +3,7 @@
 [![Build Status](https://travis-ci.org/todvora/gitbook-plugin-image-captions.svg?branch=master)](https://travis-ci.org/todvora/gitbook-plugin-image-captions)
 [![Dependencies Status](https://david-dm.org/todvora/gitbook-plugin-image-captions/status.svg)](https://david-dm.org/todvora/gitbook-plugin-image-captions/)
 [![DevDependencies Status](https://david-dm.org/todvora/gitbook-plugin-image-captions/dev-status.svg)](https://david-dm.org/todvora/gitbook-plugin-image-captions/#info=devDependencies)
+[![npm version](https://badge.fury.io/js/gitbook-plugin-image-captions.svg)](https://badge.fury.io/js/gitbook-plugin-image-captions)
 
 Add nice generated captions to your book images. This plugin converts ```alt``` or ```title``` attributes of your images into the captions. Works on both the GitBook website and your own generated book (pdf, mobi).
 
