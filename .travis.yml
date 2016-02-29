@@ -4,6 +4,7 @@ node_js:
 - '0.12'
 before_script:
 - npm install -g gitbook-cli
+- gitbook fetch $GITBOOK_VERSION
 env:
  matrix:
    - GITBOOK_VERSION=2.0
