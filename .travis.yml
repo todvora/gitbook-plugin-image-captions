@@ -4,6 +4,13 @@ node_js:
 - '0.12'
 before_script:
 - npm install -g gitbook-cli
+env:
+ matrix:
+   - GITBOOK_VERSION=2.0
+   - GITBOOK_VERSION=2.2
+   - GITBOOK_VERSION=2.4
+   - GITBOOK_VERSION=2.6
+   - GITBOOK_VERSION=3.0.0-pre.2
 deploy:
   provider: npm
   email: todvora@gmail.com
