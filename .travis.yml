@@ -6,7 +6,6 @@ before_script:
 - npm install -g gitbook-cli
 env:
  matrix:
-   - GITBOOK_VERSION=1.5
    - GITBOOK_VERSION=2.0
    - GITBOOK_VERSION=2.2
    - GITBOOK_VERSION=2.4
