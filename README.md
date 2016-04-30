@@ -265,6 +265,16 @@ This plugin is based on the example plugin from [GitbookIO/plugin](https://githu
 
 ### Changes
 
+#### 0.4.0
+- Compatibility with Gitbook 3.x (while keeping also compatibility with 2.x releases of Gitbook) [#8](https://github.com/todvora/gitbook-plugin-image-captions/issues/8). 
+
+Thanks [@piranna](https://github.com/piranna) and [@SamyPesse](https://github.com/SamyPesse) for support.
+
+#### 0.3.3 & 0.3.4
+- Fixes for [#7](https://github.com/todvora/gitbook-plugin-image-captions/issues/7)
+ 
+Thanks [@ghuntley](https://github.com/ghuntley) and [@aschempp](https://github.com/aschempp) for reports and verification.
+
 #### 0.3.2
 - Readme spelling and grammar fixes ([#5](https://github.com/todvora/gitbook-plugin-image-captions/pull/5))
 - Fixed possible issue with processing pages (promises) ([#6](https://github.com/todvora/gitbook-plugin-image-captions/issues/6))
