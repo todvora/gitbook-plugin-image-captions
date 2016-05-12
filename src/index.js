@@ -4,7 +4,13 @@ var semver = require('semver');
 
 var plugin;
 
-function getPluginClass (version) {
+function getPluginClass (gitbook) {
+  var version = null;
+  if (gitbook.gitbook) {
+    version = gitbook.gitbook.version;
+  } else {
+    version = gitbook.config.options.gitbook;
+  }
   if (semver.major(version) === 3) {
     return require('./lib/ImageCaptions3');
   } else {
@@ -33,8 +39,7 @@ module.exports = {
   },
   hooks: {
     init: function () { // before book pages has been converted to html
-      var gitbookVersion = this.config.options.gitbook;
-      var ImageCaptions = getPluginClass(gitbookVersion);
+      var ImageCaptions = getPluginClass(this);
       plugin = new ImageCaptions();
       return plugin.onInit(this);
     },
