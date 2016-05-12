@@ -25,10 +25,12 @@ ImageCaptions3.prototype.readAllImages = function (book) {
   var promises = [];
 
   var pageIndex = 0;
+
   book.summary.walk(function (page) {
     var currentPageIndex = pageIndex++;
+    var pageText = book.readFileAsString(page.ref);
 
-    promises.push(book.pages[page.ref].read().then(function () {
+    promises.push(pageText.then(function (pageContent) {
       var pageImages = [];
 
       var reg = new RegExp(/!\[(.*?)\]\((.*?)(?:\s+"(.*)")?\)/gmi);
@@ -36,7 +38,7 @@ ImageCaptions3.prototype.readAllImages = function (book) {
 
       var index = 1;
 
-      while ((result = reg.exec(book.pages[page.ref].content)) !== null) {
+      while ((result = reg.exec(pageContent)) !== null) {
         var image = {alt: result[1], url: result[2]};
         if (result[3]) {
           image.title = result[3];
