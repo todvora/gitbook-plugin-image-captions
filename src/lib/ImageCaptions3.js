@@ -18,7 +18,17 @@ ImageCaptions3.prototype.getPageParts = function (page) {
 };
 
 ImageCaptions3.prototype.getConfigValue = function (gitbook, expression, def) {
-  return gitbook.config.get(expression, def);
+  return gitbook.config.get(expression) || def;
+};
+
+ImageCaptions3.prototype.persistImagesInConfig = function (gitbook, config, images) {
+  gitbook.config.set(['variables', config.variable_name], images);
+};
+
+ImageCaptions3.prototype.readImagesFromConfig = function (gitbook) {
+  var pluginConfig = this.readConfig(gitbook);
+
+  return gitbook.config.get(['variables', pluginConfig.variable_name]);
 };
 
 ImageCaptions3.prototype.readAllImages = function (book) {
