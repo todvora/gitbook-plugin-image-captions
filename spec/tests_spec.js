@@ -304,7 +304,7 @@ describe('gitbook-plugin-image-captions', function () {
      });
   });
 
-  it.only('Should use custom caption and align together', function () {
+  it('Should use custom caption and align together', function () {
     var config = {
       plugins: ['image-captions'],
       pluginsConfig: {
