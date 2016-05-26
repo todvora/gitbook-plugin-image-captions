@@ -303,4 +303,27 @@ describe('gitbook-plugin-image-captions', function () {
        '\n' + '<figure id="fig2.2"><img src="fourth.jpg" alt="fourth"><figcaption>Image 5. - fourth</figcaption></figure>');
      });
   });
+
+  it.only('Should use custom caption and align together', function () {
+    var config = {
+      plugins: ['image-captions'],
+      pluginsConfig: {
+        'image-captions': {
+          'caption': 'Image Description - _CAPTION_',
+          'align': 'left'
+        }
+      }
+    };
+
+    return tester.builder()
+     .withContent('![bar](foo.jpg)')
+     .withBookJson(config)
+     .withLocalPlugin(thisModulePath)
+     .create()
+     .then(function (results) {
+       var figcaption = results.get('index.html').$('figure figcaption');
+       assert.equal(figcaption.text(), 'Image Description - bar');
+       assert.equal(figcaption.attr('class'), 'left');
+     });
+  });
 });
