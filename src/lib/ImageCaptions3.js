@@ -59,7 +59,12 @@ ImageCaptions3.prototype.readAllImages = function (book) {
         image.level = page.level;
         image.page_level = page.level;
         image.key = image.level + '.' + image.index;
-        image.backlink = page.ref + '#fig' + image.key; // TODO
+
+        // FIXME: is it gitbook or plugin responsibility?
+        // SEE: https://github.com/todvora/gitbook-plugin-image-captions/issues/9
+        var pageLink = page.ref.replace(/readme.md/gi, 'index.html').replace(/.md/, '.html'); 
+
+        image.backlink = pageLink + '#fig' + image.key; // TODO
 
         pageImages.push(image);
         index++;
