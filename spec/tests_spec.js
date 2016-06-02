@@ -155,9 +155,7 @@ describe('gitbook-plugin-image-captions', function () {
      .withLocalPlugin(thisModulePath)
      .create()
      .then(function (results) {
-       // compatibility between gitbook 2 and 3, version 3 relativizes paths
-       var content = results.get('index.html').content.replace(new RegExp('\\.\\/', 'g'), 'index.html');
-       assert.equal(content, expected);
+       assert.equal(results.get('index.html').content, expected);
      });
   });
 
@@ -229,9 +227,7 @@ describe('gitbook-plugin-image-captions', function () {
      .withLocalPlugin(thisModulePath)
      .create()
      .then(function (results) {
-       // compatibility between gitbook 2 and 3, version 3 relativizes paths
-       var content = results.get('index.html').content.replace(new RegExp('\\.\\/', 'g'), 'index.html');
-       assert.equal(content, expected);
+       assert.equal(results.get('index.html').content, expected);
      });
   });
 
@@ -296,7 +292,6 @@ describe('gitbook-plugin-image-captions', function () {
        assert.equal(results.get('second.html').content, '<figure id="fig1.1"><img src="second.jpg" alt="second"><figcaption>Image 2. - second</figcaption></figure>');
 
        // bug in Gitbook 2.0 in numbering of chapters. Second chapter, first subchapter gets level 1.2 instead of 1.1 as in all other versions
-       // assert.equal(results.get('second_a.html').content, '<figure id="fig1.1.1"><img src="second_a.jpg" alt="second a"><figcaption>Image 3. - second a</figcaption></figure>');
        assert.equal(results.get('second_a.html').$('figure figcaption').text(), 'Image 3. - second a');
 
        assert.equal(results.get('third.html').content, '<figure id="fig2.1"><img src="third.jpg" alt="third"><figcaption>Image 4. - third</figcaption></figure>' +
