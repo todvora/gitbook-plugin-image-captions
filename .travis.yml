@@ -7,11 +7,9 @@ before_script:
 - gitbook fetch $GITBOOK_VERSION
 env:
  matrix:
-   - GITBOOK_VERSION=2.0
-   - GITBOOK_VERSION=2.2
-   - GITBOOK_VERSION=2.4
-   - GITBOOK_VERSION=2.6
    - GITBOOK_VERSION=3.0
+   - GITBOOK_VERSION=3.1
+   - GITBOOK_VERSION=latest
 deploy:
   provider: npm
   email: todvora@gmail.com
