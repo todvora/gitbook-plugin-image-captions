@@ -2,7 +2,7 @@
   "name": "gitbook-plugin-image-captions",
   "description": "Image captions plugin for GitBook",
   "main": "src/index.js",
-  "version": "0.4.1",
+  "version": "3.0.0",
   "author": "Tomas Dvorak <todvora@gmail.com>",
   "keywords": [
     "gitbook",
