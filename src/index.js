@@ -112,10 +112,11 @@ var insertCaptions = function (images, page, htmlContent) {
     var key = pageLevel + '.' + (i + 1);
 
     var data = images.filter(function (item) { return item.key === key; })[0];
-
-    setImageAttributes(img, data);
-    setImageCaption($, img, data);
-    setImageAlignment($, img, data);
+    if (!data.skip) {
+      setImageAttributes(img, data);
+      setImageCaption($, img, data);
+      setImageAlignment($, img, data);
+    }
   });
   return $.html();
 };
@@ -138,6 +139,13 @@ function readAlignFromConfig (config, imageKey) {
   return null;
 }
 
+function readSkipFlag (config, imageKey) {
+  if (config.images && config.images[imageKey] && typeof config.images[imageKey].skip === 'boolean') {
+    return config.images[imageKey].skip;
+  }
+  return false;
+}
+
 function shouldBeWrapped (img) {
   return img.parent().children().length === 1 &&
          img.parent().text() === '' &&
@@ -153,6 +161,8 @@ function preprocessImages (results, config) {
   .map(function (image) {
     image.nro = totalCounter++;
     image.attributes = readImageAttributesFromConfig(config, image.key);
+
+    image.skip = readSkipFlag(config, image.key);
 
     var align = readAlignFromConfig(config, image.key);
     if (align) {

@@ -111,6 +111,22 @@ Similarly, you can specify image tag attributes globally or at specific image le
   }
 ```
 
+### Skip selected images
+
+You can specify which images should be skipped and not enriched by a figure caption:
+
+```json
+  "pluginsConfig": {
+    "image-captions": {
+      "images": {
+        "1.2.2": {
+          "skip": true
+        }
+      }
+    }
+  }
+```
+
 ### Image list
 
 As of version `0.3.0`, image list is available from book variables. You need to define a variable name:
@@ -266,13 +282,13 @@ This plugin is based on the example plugin from [GitbookIO/plugin](https://githu
 ### Changes
 
 #### 0.4.0
-- Compatibility with Gitbook 3.x (while keeping also compatibility with 2.x releases of Gitbook) [#8](https://github.com/todvora/gitbook-plugin-image-captions/issues/8). 
+- Compatibility with Gitbook 3.x (while keeping also compatibility with 2.x releases of Gitbook) [#8](https://github.com/todvora/gitbook-plugin-image-captions/issues/8).
 
 Thanks [@piranna](https://github.com/piranna) and [@SamyPesse](https://github.com/SamyPesse) for support.
 
 #### 0.3.3 & 0.3.4
 - Fixes for [#7](https://github.com/todvora/gitbook-plugin-image-captions/issues/7)
- 
+
 Thanks [@ghuntley](https://github.com/ghuntley) and [@aschempp](https://github.com/aschempp) for reports and verification.
 
 #### 0.3.2

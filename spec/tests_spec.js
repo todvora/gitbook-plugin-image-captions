@@ -321,4 +321,31 @@ describe('gitbook-plugin-image-captions', function () {
        assert.equal(figcaption.attr('class'), 'left');
      });
   });
+
+  it('Should skip selected images', function () {
+    var config = {
+      plugins: ['image-captions'],
+      pluginsConfig: {
+        'image-captions': {
+          'images': {
+            '1.1.1': {
+              'skip': true
+            },
+            '1.1.2': {
+              'skip': false
+            }
+          }
+        }
+      }
+    };
+
+    return tester.builder()
+     .withContent('![bar](foo.jpg)\n\n![lorem](ipsum.jpg)')
+     .withBookJson(config)
+     .withLocalPlugin(thisModulePath)
+     .create()
+     .then(function (results) {
+       assert.equal(results.get('index.html').content, '<p><img src="foo.jpg" alt="bar"></p>\n<figure id="fig1.1.2"><img src="ipsum.jpg" alt="lorem"><figcaption>Figure: lorem</figcaption></figure>');
+     });
+  });
 });
