@@ -219,7 +219,6 @@ var readAllImages = function (gitbook) {
         };
       }));
     }
-    }
   });
   return Q.all(promises);
 };
