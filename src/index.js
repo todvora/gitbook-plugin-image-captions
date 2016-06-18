@@ -181,38 +181,38 @@ var readAllImages = function (gitbook) {
 
   gitbook.summary.walk(function (page) {
     var currentPageIndex = pageIndex++;
-    if(page.ref){ // Check that there is truly a link
+    if (page.ref) { // Check that there is truly a link
       var pageText = gitbook.readFileAsString(page.ref);
       promises.push(pageText.then(function (pageContent) {
         var pageImages = [];
-  
+
         var reg = new RegExp(/!\[(.*?)\]\((.*?)(?:\s+"(.*)")?\)/gmi);
         var result;
-  
+
         var index = 1;
-  
+
         while ((result = reg.exec(pageContent)) !== null) {
           var image = {alt: result[1], url: result[2]};
           if (result[3]) {
             image.title = result[3];
           }
-  
+
           image.label = image.title || image.alt;
           image.index = index;
           image.level = page.level;
           image.page_level = page.level;
           image.key = image.level + '.' + image.index;
-  
+
           // FIXME: is it gitbook or plugin responsibility?
           // SEE: https://github.com/todvora/gitbook-plugin-image-captions/issues/9
           var pageLink = page.ref.replace(/readme.md/gi, 'index.html').replace(/.md/, '.html');
-  
+
           image.backlink = pageLink + '#fig' + image.key; // TODO
-  
+
           pageImages.push(image);
           index++;
         }
-  
+
         return {
           data: pageImages.reduce(function (acc, val) { return acc.concat(val); }, []),
           order: currentPageIndex
