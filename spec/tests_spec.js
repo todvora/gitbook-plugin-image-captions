@@ -348,4 +348,17 @@ describe('gitbook-plugin-image-captions', function () {
        assert.equal(results.get('index.html').content, '<p><img src="foo.jpg" alt="bar"></p>\n<figure id="fig1.1.2"><img src="ipsum.jpg" alt="lorem"><figcaption>Figure: lorem</figcaption></figure>');
      });
   });
+
+  it('should handle pages in summary, that have no link', function () {
+    return tester.builder()
+     .withContent('#just some \n\ntext')
+     .withFile('SUMMARY.md', '# Summary\n* intro') // override the generated SUMMARY.md with own content
+     .withLocalPlugin(thisModulePath)
+     .create()
+     .then(function (results) {
+       var menuItem = results.get('index.html').$('li.chapter[data-level="1.2"] span').html().trim();
+       assert.equal(menuItem, 'intro'); // verify, that there is no link attached to this menu item (only raw text inside span)
+       assert.equal(results.get('index.html').content, '<h1 id="just-some">just some</h1>\n<p>text</p>');
+     });
+  });
 });
