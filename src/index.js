@@ -169,8 +169,8 @@ var readAllImages = function (gitbook) {
 
   gitbook.summary.walk(function (page) {
     var currentPageIndex = pageIndex++;
-    if (page.ref) { // Check that there is truly a link
-      var pageText = gitbook.readFileAsString(page.ref);
+    if (page.path) { // Check that there is truly a link
+      var pageText = gitbook.readFileAsString(page.path);
       promises.push(pageText.then(function (pageContent) {
         var pageImages = [];
 

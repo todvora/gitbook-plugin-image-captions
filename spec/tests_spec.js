@@ -361,4 +361,31 @@ describe('gitbook-plugin-image-captions', function () {
        assert.equal(results.get('index.html').content, '<h1 id="just-some">just some</h1>\n<p>text</p>');
      });
   });
+
+  it('should handle anchors in summary', function () {
+    var summaryContent = ['# Summary', '* [intro](README.md)', '   * [anchor](README.md#origin)'];
+    return tester.builder()
+     .withContent('#just some \n\ntext')
+     .withFile('SUMMARY.md', summaryContent.join('\n')) // override the generated SUMMARY.md with own content
+     .withLocalPlugin(thisModulePath)
+     .create()
+     .then(function (results) {
+       var $ = results.get('index.html').$;
+       var menuLinks = $('li.chapter a');
+       var actual = menuLinks.map(function () {
+         return {
+           href: $(this).attr('href').trim(),
+           text: $(this).text().trim()
+         };
+       })
+       .get();
+
+       var expected = [
+         { href: './', text: 'intro' },
+         { href: './#origin', text: 'anchor' }
+       ];
+
+       assert.deepEqual(actual, expected);
+     });
+  });
 });
