@@ -16,23 +16,11 @@ var onInit = function (gitbook) {
     });
 };
 
-var getPageParts = function (page) {
-  return [page];
-};
-
 var onPage = function (gitbook, page) {
   var images = readImagesFromConfig(gitbook);
-
-  getPageParts(page)
-    .forEach(function (section) {
-      var html = insertCaptions(images, page, section.content);
-      section.content = html; // side effect!
-    });
+  var html = insertCaptions(images, page, page.content);
+  page.content = html; // side effect!
   return page;
-};
-
-var getPageLevel = function (page) {
-  return page.level;
 };
 
 var getConfigValue = function (gitbook, expression, def) {
@@ -101,7 +89,7 @@ function setImageAlignment ($, img, data) {
 }
 
 var insertCaptions = function (images, page, htmlContent) {
-  var pageLevel = getPageLevel(page);
+  var pageLevel = page.level;
   var $ = cheerio.load(htmlContent);
   // get all images from section content
   $('img').filter(function () {
