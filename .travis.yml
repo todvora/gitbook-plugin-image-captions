@@ -8,6 +8,7 @@ before_script:
 env:
  matrix:
    - GITBOOK_VERSION=3.1
+   - GITBOOK_VERSION=3.2
    - GITBOOK_VERSION=latest
 deploy:
   provider: npm
