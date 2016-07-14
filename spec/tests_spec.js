@@ -1,7 +1,8 @@
 var fs = require('fs');
 var path = require('path');
 var tester = require('gitbook-tester');
-var assert = require('assert');
+var should = require('should');
+require('should-html');
 
 var thisModulePath = path.join(__dirname, '..');
 
@@ -20,14 +21,14 @@ describe('gitbook-plugin-image-captions', function () {
   it('should not change content without images', function () {
     return basicBuild('#heading\n\nparagraph')
       .then(function (results) {
-        assert.equal(results[0].content, '<h1 id="heading">heading</h1>\n<p>paragraph</p>');
+        results.get('index.html').content.should.be.html('<h1 id="heading">heading</h1>\n<p>paragraph</p>');
       });
   });
 
   it('should create caption from alt attribute', function () {
     return basicBuild('![bar](foo.jpg)')
     .then(function (results) {
-      assert.equal(results[0].content, '<figure id="fig1.1.1"><img src="foo.jpg" alt="bar"><figcaption>Figure: bar</figcaption></figure>');
+      results.get('index.html').content.should.be.html('<figure id="fig1.1.1"><img src="foo.jpg" alt="bar"><figcaption>Figure: bar</figcaption></figure>');
     });
   });
 
@@ -45,7 +46,7 @@ describe('gitbook-plugin-image-captions', function () {
     .withLocalPlugin(thisModulePath)
     .create()
     .then(function (results) {
-      assert.equal(results[0].content, '<figure id="fig1.1.1"><img src="foo.jpg" alt="bar"><figcaption>Image - bar</figcaption></figure>');
+      results.get('index.html').content.should.be.html('<figure id="fig1.1.1"><img src="foo.jpg" alt="bar"><figcaption>Image - bar</figcaption></figure>');
     });
   });
 
@@ -63,56 +64,56 @@ describe('gitbook-plugin-image-captions', function () {
      .withLocalPlugin(thisModulePath)
      .create()
      .then(function (results) {
-       assert.equal(results[0].content, '<figure id="fig1.1.1"><img src="foo.jpg" alt="bar"><figcaption class="left">Figure: bar</figcaption></figure>');
+       results.get('index.html').content.should.be.html('<figure id="fig1.1.1"><img src="foo.jpg" alt="bar"><figcaption class="left">Figure: bar</figcaption></figure>');
      });
   });
 
   it('should prefer title attribute if available', function () {
     return basicBuild('![alt text](img.jpg "title text")')
      .then(function (results) {
-       assert.equal(results[0].content, '<figure id="fig1.1.1"><img src="img.jpg" alt="alt text" title="title text"><figcaption>Figure: title text</figcaption></figure>');
+       results.get('index.html').content.should.be.html('<figure id="fig1.1.1"><img src="img.jpg" alt="alt text" title="title text"><figcaption>Figure: title text</figcaption></figure>');
      });
   });
 
   it('should ignore images with empty alt', function () {
     return basicBuild('![](img.jpg)')
      .then(function (results) {
-       assert.equal(results[0].content, '<p><img src="img.jpg" alt=""></p>');
+       results.get('index.html').content.should.be.html('<p><img src="img.jpg" alt=""></p>');
      });
   });
 
   it('should ignore images with empty title and fallback to alt', function () {
     return basicBuild('![bar](img.jpg "")')
      .then(function (results) {
-       assert.equal(results[0].content, '<figure id="fig1.1.1"><img src="img.jpg" alt="bar"><figcaption>Figure: bar</figcaption></figure>');
+       results.get('index.html').content.should.be.html('<figure id="fig1.1.1"><img src="img.jpg" alt="bar"><figcaption>Figure: bar</figcaption></figure>');
      });
   });
 
   it('should ignore inline images (pre)', function () {
     return basicBuild('foo ![bar](img.jpg)')
      .then(function (results) {
-       assert.equal(results[0].content, '<p>foo <img src="img.jpg" alt="bar"></p>');
+       results.get('index.html').content.should.be.html('<p>foo <img src="img.jpg" alt="bar"></p>');
      });
   });
 
   it('should ignore inline images (post)', function () {
     return basicBuild('![bar](img.jpg) bar')
      .then(function (results) {
-       assert.equal(results[0].content, '<p><img src="img.jpg" alt="bar"> bar</p>');
+       results.get('index.html').content.should.be.html('<p><img src="img.jpg" alt="bar"> bar</p>');
      });
   });
 
   it('should ignore inline images', function () {
     return basicBuild('foo ![bar](img.jpg) bar')
      .then(function (results) {
-       assert.equal(results[0].content, '<p>foo <img src="img.jpg" alt="bar"> bar</p>');
+       results.get('index.html').content.should.be.html('<p>foo <img src="img.jpg" alt="bar"> bar</p>');
      });
   });
 
   it('should ignore multiple images in paragraph', function () {
     return basicBuild('![bar1](foo1.jpg)![bar2](foo2.jpg)')
      .then(function (results) {
-       assert.equal(results[0].content, '<p><img src="foo1.jpg" alt="bar1"><img src="foo2.jpg" alt="bar2"></p>');
+       results.get('index.html').content.should.be.html('<p><img src="foo1.jpg" alt="bar1"><img src="foo2.jpg" alt="bar2"></p>');
      });
   });
 
@@ -132,7 +133,7 @@ describe('gitbook-plugin-image-captions', function () {
      .withLocalPlugin(thisModulePath)
      .create()
      .then(function (results) {
-       assert.equal(results[0].content, '<figure id="fig1.1.1"><img src="foo.jpg" alt="bar"><figcaption>Image 1.1.1 - bar</figcaption></figure>');
+       results.get('index.html').content.should.be.html('<figure id="fig1.1.1"><img src="foo.jpg" alt="bar"><figcaption>Image 1.1.1 - bar</figcaption></figure>');
      });
   });
 
@@ -155,7 +156,7 @@ describe('gitbook-plugin-image-captions', function () {
      .withLocalPlugin(thisModulePath)
      .create()
      .then(function (results) {
-       assert.equal(results.get('index.html').content, expected);
+       results.get('index.html').content.should.be.html(expected);
      });
   });
 
@@ -179,7 +180,7 @@ describe('gitbook-plugin-image-captions', function () {
      .withLocalPlugin(thisModulePath)
      .create()
      .then(function (results) {
-       assert.equal(results[0].content, expected);
+       results.get('index.html').content.should.be.html(expected);
      });
   });
 
@@ -203,7 +204,7 @@ describe('gitbook-plugin-image-captions', function () {
      .withLocalPlugin(thisModulePath)
      .create()
      .then(function (results) {
-       assert.equal(results[0].content, '<figure id="fig1.1.1"><img src="foo.jpg" alt="bar"><figcaption>Special image 1.1.1: bar</figcaption></figure>');
+       results.get('index.html').content.should.be.html('<figure id="fig1.1.1"><img src="foo.jpg" alt="bar"><figcaption>Special image 1.1.1: bar</figcaption></figure>');
      });
   });
 
@@ -227,7 +228,7 @@ describe('gitbook-plugin-image-captions', function () {
      .withLocalPlugin(thisModulePath)
      .create()
      .then(function (results) {
-       assert.equal(results.get('index.html').content, expected);
+       results.get('index.html').content.should.be.html(expected);
      });
   });
 
@@ -257,14 +258,14 @@ describe('gitbook-plugin-image-captions', function () {
      .withLocalPlugin(thisModulePath)
      .create()
      .then(function (results) {
-       assert.equal(results[0].content, expected);
+       results.get('index.html').content.should.be.html(expected);
      });
   });
 
   it('should handle image inside link', function () {
     return basicBuild('[![SPE Remoting Module](http://img.youtube.com/vi/fGvT8eDdWrg/0.jpg)](http://www.youtube.com/watch?v=fGvT8eDdWrg "Click for a quick demo")')
      .then(function (results) {
-       assert.equal(results[0].content, '<a href="http://www.youtube.com/watch?v=fGvT8eDdWrg" title="Click for a quick demo" target="_blank"><figure id="fig1.1.1"><img src="http://img.youtube.com/vi/fGvT8eDdWrg/0.jpg" alt="SPE Remoting Module"><figcaption>Figure: SPE Remoting Module</figcaption></figure></a>');
+       results.get('index.html').content.should.be.html('<a href="http://www.youtube.com/watch?v=fGvT8eDdWrg" title="Click for a quick demo" target="_blank"><figure id="fig1.1.1"><img src="http://img.youtube.com/vi/fGvT8eDdWrg/0.jpg" alt="SPE Remoting Module"><figcaption>Figure: SPE Remoting Module</figcaption></figure></a>');
      });
   });
 
@@ -288,13 +289,13 @@ describe('gitbook-plugin-image-captions', function () {
      .withLocalPlugin(thisModulePath)
      .create()
      .then(function (results) {
-       assert.equal(results.get('index.html').content, '<figure id="fig1.1.1"><img src="first.jpg" alt="first"><figcaption>Image 1. - first</figcaption></figure>');
-       assert.equal(results.get('second.html').content, '<figure id="fig1.2.1"><img src="second.jpg" alt="second"><figcaption>Image 2. - second</figcaption></figure>');
+       results.get('index.html').content.should.be.html('<figure id="fig1.1.1"><img src="first.jpg" alt="first"><figcaption>Image 1. - first</figcaption></figure>');
+       results.get('second.html').content.should.be.html('<figure id="fig1.2.1"><img src="second.jpg" alt="second"><figcaption>Image 2. - second</figcaption></figure>');
 
        // bug in Gitbook 2.0 in numbering of chapters. Second chapter, first subchapter gets level 1.2 instead of 1.1 as in all other versions
-       assert.equal(results.get('second_a.html').$('figure figcaption').text(), 'Image 3. - second a');
+       should(results.get('second_a.html').$('figure figcaption').text()).equal('Image 3. - second a');
 
-       assert.equal(results.get('third.html').content, '<figure id="fig1.3.1"><img src="third.jpg" alt="third"><figcaption>Image 4. - third</figcaption></figure>' +
+       results.get('third.html').content.should.be.html('<figure id="fig1.3.1"><img src="third.jpg" alt="third"><figcaption>Image 4. - third</figcaption></figure>' +
        '\n' + '<figure id="fig1.3.2"><img src="fourth.jpg" alt="fourth"><figcaption>Image 5. - fourth</figcaption></figure>');
      });
   });
@@ -317,8 +318,8 @@ describe('gitbook-plugin-image-captions', function () {
      .create()
      .then(function (results) {
        var figcaption = results.get('index.html').$('figure figcaption');
-       assert.equal(figcaption.text(), 'Image Description - bar');
-       assert.equal(figcaption.attr('class'), 'left');
+       should(figcaption.text()).equal('Image Description - bar');
+       should(figcaption.attr('class')).equal('left');
      });
   });
 
@@ -345,7 +346,7 @@ describe('gitbook-plugin-image-captions', function () {
      .withLocalPlugin(thisModulePath)
      .create()
      .then(function (results) {
-       assert.equal(results.get('index.html').content, '<p><img src="foo.jpg" alt="bar"></p>\n<figure id="fig1.1.2"><img src="ipsum.jpg" alt="lorem"><figcaption>Figure: lorem</figcaption></figure>');
+       results.get('index.html').content.should.be.html('<p><img src="foo.jpg" alt="bar"></p>\n<figure id="fig1.1.2"><img src="ipsum.jpg" alt="lorem"><figcaption>Figure: lorem</figcaption></figure>');
      });
   });
 
@@ -357,8 +358,8 @@ describe('gitbook-plugin-image-captions', function () {
      .create()
      .then(function (results) {
        var menuItem = results.get('index.html').$('li.chapter[data-level="1.2"] span').html().trim();
-       assert.equal(menuItem, 'intro'); // verify, that there is no link attached to this menu item (only raw text inside span)
-       assert.equal(results.get('index.html').content, '<h1 id="just-some">just some</h1>\n<p>text</p>');
+       should(menuItem).equal('intro'); // verify, that there is no link attached to this menu item (only raw text inside span)
+       results.get('index.html').content.should.be.html('<h1 id="just-some">just some</h1>\n<p>text</p>');
      });
   });
 
@@ -385,7 +386,7 @@ describe('gitbook-plugin-image-captions', function () {
          { href: './#origin', text: 'anchor' }
        ];
 
-       assert.deepEqual(actual, expected);
+       should(actual).deepEqual(expected);
      });
   });
 });
