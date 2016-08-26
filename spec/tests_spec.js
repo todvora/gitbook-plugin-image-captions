@@ -389,4 +389,11 @@ describe('gitbook-plugin-image-captions', function () {
        should(actual).deepEqual(expected);
      });
   });
+
+  it('should handle raw HTML image', function () {
+    return basicBuild('<img src="foo.jpg" alt="bar">')
+    .then(function (results) {
+      results.get('index.html').content.should.be.html('<figure id="fig1.1.1"><img src="foo.jpg" alt="bar"><figcaption>Figure: bar</figcaption></figure>');
+    });
+  });
 });

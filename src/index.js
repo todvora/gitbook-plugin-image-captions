@@ -58,7 +58,7 @@ function createCaption (image, key, options, captionKey) {
   // replace supported template placeholders
   return getCaptionTemplate(key, options, captionKey)
     .replace('_CAPTION_', image.label) // img title or alt attribute
-    .replace('_PAGE_LEVEL_', image.page_level) // book page level
+    .replace('_PAGE_LEVEL_', image.level) // book page level
     .replace('_PAGE_IMAGE_NUMBER_', image.index) // order of the image on the page
     .replace('_BOOK_IMAGE_NUMBER_', image.nro); // order of the image on the book
 }
@@ -100,7 +100,7 @@ var insertCaptions = function (images, page, htmlContent) {
     var key = pageLevel + '.' + (i + 1);
 
     var data = images.filter(function (item) { return item.key === key; })[0];
-    if (!data.skip) {
+    if (data && !data.skip) {
       setImageAttributes(img, data);
       setImageCaption($, img, data);
       setImageAlignment($, img, data);
@@ -162,6 +162,30 @@ function preprocessImages (results, config) {
   });
 }
 
+var getPageHtmlContent = function (gitbook, page) {
+  return gitbook.readFileAsString(page.path)
+    .then(function (text) {
+      return gitbook.renderBlock('markdown', text); // TODO: what about AsciiDoc? Detection based on file extension?
+    });
+};
+
+var parseImageData = function (page, index, img) {
+  var image = {alt: img.attr('alt'), url: img.attr('src')};
+  if (img.attr('title')) {
+    image.title = img.attr('title');
+  }
+  image.label = image.title || image.alt;
+  image.index = index + 1;
+  image.level = page.level;
+  image.key = page.level + '.' + image.index;
+
+  // FIXME: is it gitbook or plugin responsibility?
+  // SEE: https://github.com/todvora/gitbook-plugin-image-captions/issues/9
+  var pageLink = page.ref.replace(/readme.md/gi, 'index.html').replace(/.md/, '.html');
+  image.backlink = pageLink + '#fig' + image.key; // TODO
+  return image;
+};
+
 var readAllImages = function (gitbook) {
   var promises = [];
 
@@ -170,42 +194,23 @@ var readAllImages = function (gitbook) {
   gitbook.summary.walk(function (page) {
     var currentPageIndex = pageIndex++;
     if (page.path) { // Check that there is truly a link
-      var pageText = gitbook.readFileAsString(page.path);
-      promises.push(pageText.then(function (pageContent) {
-        var pageImages = [];
-
-        var reg = new RegExp(/!\[(.*?)\]\((.*?)(?:\s+"(.*)")?\)/gmi);
-        var result;
-
-        var index = 1;
-
-        while ((result = reg.exec(pageContent)) !== null) {
-          var image = {alt: result[1], url: result[2]};
-          if (result[3]) {
-            image.title = result[3];
-          }
-
-          image.label = image.title || image.alt;
-          image.index = index;
-          image.level = page.level;
-          image.page_level = page.level;
-          image.key = image.level + '.' + image.index;
-
-          // FIXME: is it gitbook or plugin responsibility?
-          // SEE: https://github.com/todvora/gitbook-plugin-image-captions/issues/9
-          var pageLink = page.ref.replace(/readme.md/gi, 'index.html').replace(/.md/, '.html');
-
-          image.backlink = pageLink + '#fig' + image.key; // TODO
-
-          pageImages.push(image);
-          index++;
-        }
-
-        return {
-          data: pageImages.reduce(function (acc, val) { return acc.concat(val); }, []),
-          order: currentPageIndex
-        };
-      }));
+      promises.push(
+        getPageHtmlContent(gitbook, page)
+        .then(function (pageContent) {
+          var $ = cheerio.load(pageContent);
+          var pageImages = $('img')
+            .filter(function () {
+              return shouldBeWrapped($(this));
+            })
+            .map(function (index) {
+              var img = $(this);
+              return parseImageData(page, index++, img);
+            }).get();
+          return {
+            data: pageImages.reduce(function (acc, val) { return acc.concat(val); }, []),
+            order: currentPageIndex
+          };
+        }));
     }
   });
   return Q.all(promises);
