@@ -56,11 +56,15 @@ function getCaptionTemplate (imageKey, options, captionVarName) {
 
 function createCaption (image, key, options, captionKey) {
   // replace supported template placeholders
-  return getCaptionTemplate(key, options, captionKey)
-    .replace('_CAPTION_', image.label) // img title or alt attribute
-    .replace('_PAGE_LEVEL_', image.level) // book page level
-    .replace('_PAGE_IMAGE_NUMBER_', image.index) // order of the image on the page
-    .replace('_BOOK_IMAGE_NUMBER_', image.nro); // order of the image on the book
+  return renderTemplate(getCaptionTemplate(key, options, captionKey), image);
+}
+
+function renderTemplate (template, data) {
+  return template
+    .replace('_CAPTION_', data.label) // img title or alt attribute
+    .replace('_PAGE_LEVEL_', data.level) // book page level
+    .replace('_PAGE_IMAGE_NUMBER_', data.index) // order of the image on the page
+    .replace('_BOOK_IMAGE_NUMBER_', data.nro); // order of the image on the book
 }
 
 function setImageAttributes (img, data) {
@@ -71,7 +75,9 @@ function setImageAttributes (img, data) {
 
 function setImageCaption ($, img, data) {
   var imageParent = img.parent();
-  var figure = '<figure id="fig' + data.key + '">' + $.html(img) + '<figcaption>' + data.caption + '</figcaption></figure>';
+  data.label = img.attr('title') || img.attr('alt'); // all page variables are already interpolated
+  var caption = renderTemplate(data.caption_template, data);
+  var figure = '<figure id="fig' + data.key + '">' + $.html(img) + '<figcaption>' + caption + '</figcaption></figure>';
   if (imageParent[0].tagName === 'p') {
     // the image is wrapped only by a paragraph
     imageParent.replaceWith(figure);
@@ -98,7 +104,6 @@ var insertCaptions = function (images, page, htmlContent) {
   .each(function (i) {
     var img = $(this);
     var key = pageLevel + '.' + (i + 1);
-
     var data = images.filter(function (item) { return item.key === key; })[0];
     if (data && !data.skip) {
       setImageAttributes(img, data);
@@ -157,7 +162,7 @@ function preprocessImages (results, config) {
       image.align = align;
     }
     image.list_caption = createCaption(image, image.key, config, 'list_caption');
-    image.caption = createCaption(image, image.key, config, 'caption');
+    image.caption_template = getCaptionTemplate(image.key, config, 'caption');
     return image;
   });
 }

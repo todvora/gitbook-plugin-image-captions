@@ -396,4 +396,23 @@ describe('gitbook-plugin-image-captions', function () {
       results.get('index.html').content.should.be.html('<figure id="fig1.1.1"><img src="foo.jpg" alt="bar"><figcaption>Figure: bar</figcaption></figure>');
     });
   });
+
+  it('should interpolate page variables inside caption', function () {
+    var pageContent = readFile('variable_interpolation_provided.md');
+    var config = {
+      plugins: ['image-captions'],
+      pluginsConfig: {
+        'image-captions': {caption: 'Figure _BOOK_IMAGE_NUMBER_: _CAPTION_'}
+      }
+    };
+
+    return tester.builder()
+     .withContent(pageContent)
+     .withBookJson(config)
+     .withLocalPlugin(thisModulePath)
+     .create()
+     .then(function (results) {
+       results.get('index.html').content.should.be.html(readFile('variable_interpolation_expected.html'));
+     });
+  });
 });
