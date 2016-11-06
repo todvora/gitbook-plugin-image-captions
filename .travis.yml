@@ -18,4 +18,5 @@ deploy:
     secure: W2yYn+A6i/t0lJY9ikIHisv3sUE1AWei1HcXMssJYFox/qLBvyXHl4SXdM0lPGaQOS/y9kt13Lo2SMv2J8KS4MPxEiLcYEyFNz0XdpR9swbeg2t6RirsCZcqCoSGx66sI1w3jv9N2tWCnrZBpL62m2yoKldmpgXHIwnwLEMySvU=
   on:
     tags: true
+    condition: "$GITBOOK_VERSION = latest"
     repo: todvora/gitbook-plugin-image-captions
