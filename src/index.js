@@ -203,7 +203,6 @@ var readAllImages = function (gitbook) {
       if (pagesToScan.indexOf(page.path) !== -1)
           return;
       pagesToScan.push(page.path);
-      console.log(page.path);
       promises.push(
         getPageHtmlContent(gitbook, page)
         .then(function (pageContent) {
