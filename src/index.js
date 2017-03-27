@@ -193,12 +193,16 @@ var parseImageData = function (page, index, img) {
 
 var readAllImages = function (gitbook) {
   var promises = [];
+  var pagesToScan = [];
 
   var pageIndex = 0;
 
   gitbook.summary.walk(function (page) {
     var currentPageIndex = pageIndex++;
     if (page.path) { // Check that there is truly a link
+      if (pagesToScan.indexOf(page.path) !== -1)
+          return;
+      pagesToScan.push(page.path);
       promises.push(
         getPageHtmlContent(gitbook, page)
         .then(function (pageContent) {
