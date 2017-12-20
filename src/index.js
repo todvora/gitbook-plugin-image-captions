@@ -94,6 +94,15 @@ function setImageAlignment ($, img, data) {
   }
 }
 
+function updateImageReferences($, data) {
+    var selector = `span[data-figure-src='${data.url}']`;
+    $(selector).
+    each(function(i) {
+        var reference = renderTemplate(data.reference_template, data);
+        $(this).text(reference);
+    });
+}
+
 var insertCaptions = function (images, page, htmlContent) {
   var pageLevel = page.level;
   var $ = cheerio.load(htmlContent);
@@ -109,6 +118,7 @@ var insertCaptions = function (images, page, htmlContent) {
       setImageAttributes(img, data);
       setImageCaption($, img, data);
       setImageAlignment($, img, data);
+      updateImageReferences($, data);
     }
   });
   return $.html();
@@ -163,6 +173,7 @@ function preprocessImages (results, config) {
     }
     image.list_caption = createCaption(image, image.key, config, 'list_caption');
     image.caption_template = getCaptionTemplate(image.key, config, 'caption');
+    image.reference_template = config['reference'] ? config['reference'] : "Figure _PAGE_LEVEL_._PAGE_IMAGE_NUMBER_";
     return image;
   });
 }
@@ -233,6 +244,11 @@ module.exports = {
     css: [
       'image-captions.css'
     ]
+  },
+  filters: {
+      fig: function( key ){
+            return `<span data-figure-src="${key}"></span>`
+		}
   },
   hooks: {
     init: function () { // before book pages has been converted to html
